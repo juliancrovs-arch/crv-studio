@@ -1,0 +1,8 @@
+{
+  "name": "crv-studio",
+  "version": "3.0.0",
+  "description": "CRV Studio - Diseño web, desarrollo y fotografía",
+  "scripts": {
+    "deploy": "wrangler pages deploy . --project-name=CrvStudio"
+  }
+}
