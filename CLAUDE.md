@@ -188,4 +188,96 @@ Guardar logs en D1 por 90 días.
 
 ---
 
+## WORKFLOW MAESTRO
+
+Pipeline de 7 agentes que construye un proyecto completo desde un brief hasta el deploy.
+
+### Agentes y orden
+
+```
+Discovery → Planning → Architecture → Components → Code → QA → Deploy
+```
+
+| Agente       | Modelo  | Output                                       |
+|--------------|---------|----------------------------------------------|
+| Discovery    | Haiku   | JSON: objetivos, tipo, restricciones         |
+| Planning     | Haiku   | JSON: fases, tareas, estimaciones            |
+| Architecture | Haiku   | JSON: carpetas, endpoints, tablas D1         |
+| Components   | Haiku   | JSON: componentes a reutilizar/crear         |
+| Code         | Sonnet  | JSON: código real de los archivos críticos   |
+| QA           | Haiku   | JSON: score, checklist, issues               |
+| Deploy       | Haiku   | JSON: comandos, variables, health check      |
+
+### Método 1: CLI (init-project.js)
+
+```bash
+node scripts/init-project.js \
+  --cliente=og-barber \
+  --nombre="OG Barber Studio" \
+  --brief="Sistema de booking con agente conversacional para barbería premium en Patagonia"
+```
+
+Esto crea la carpeta `proyectos/og-barber/`, los archivos base y llama al endpoint.
+
+### Método 2: Claude Code prompt
+
+```
+Iniciá el workflow maestro para el cliente "cafe-laz".
+Brief: "Menú digital QR con analytics y panel admin para cafetería en Neuquén"
+Llamá a POST /api/workflow/start con cliente=cafe-laz y el brief.
+Mostrá el projectId y monitoreá el progreso.
+```
+
+### Monitorear progreso
+
+```bash
+# Status de un proyecto
+curl http://localhost:8787/api/workflow/status/{projectId}
+
+# Lista todos los proyectos
+curl http://localhost:8787/api/workflow/list
+
+# Dashboard visual
+open http://localhost:3456/src/admin/workflow.html
+```
+
+### Reintentar si hay error
+
+```bash
+curl -X POST http://localhost:8787/api/workflow/retry/{projectId}
+```
+
+### Rate limits
+
+| Recurso                      | Límite | Ventana    |
+|------------------------------|--------|------------|
+| Proyectos nuevos por cliente | 10     | por día    |
+| Tokens por proyecto          | 500K   | por proyecto|
+| Reintentos por agente        | 3      | por agente |
+
+### Costos estimados
+
+| Proyecto simple (solo Haiku) | ~$0.02 |
+| Proyecto completo (con Code) | ~$0.20 |
+| Proyecto complejo (brief largo) | ~$0.50 |
+
+### Troubleshooting
+
+**El orchestrator no responde**
+→ Verificar que el Worker esté corriendo: `wrangler dev src/workers/orchestrator.js`
+
+**Agente devuelve JSON inválido**
+→ El agente reintenta hasta 3 veces. Si sigue fallando, revisar el prompt en `orchestrator.js > construirSystemPrompt()`
+
+**Error de rate limit (429)**
+→ El cliente alcanzó 10 proyectos/día. Esperar hasta mañana o aumentar `MAX_PROYECTOS_DIA` en `orchestrator.js`
+
+**Stage se queda en "running" sin avanzar**
+→ El Worker de Cloudflare puede haber caído. Revisar logs en Dashboard CF y reintentar con `/retry`
+
+**Ver el workflow completo documentado:**
+`docs/workflow-maestro.md`
+
+---
+
 **Construir sistemas. No páginas. 🚀**
