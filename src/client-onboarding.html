@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CRV Studio — Onboarding de Cliente</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0a0a0a;
+      --surface: #111;
+      --border:  #1e1e1e;
+      --fg:      #e8e8e8;
+      --muted:   #555;
+      --accent:  #a0ff6f;
+      --error:   #ff4d4d;
+      --warn:    #ffcc44;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      padding-bottom: 4rem;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo { color: var(--accent); font-weight: bold; letter-spacing: 0.2em; font-size: 0.85rem; }
+    .header-sub { color: var(--muted); font-size: 0.75rem; }
+
+    /* ── Layout ── */
+    .container { max-width: 780px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+    /* ── Pasos ── */
+    .steps {
+      display: flex;
+      gap: 0;
+      margin-bottom: 2.5rem;
+      border: 1px solid var(--border);
+    }
+    .step {
+      flex: 1;
+      padding: 0.6rem 0.5rem;
+      text-align: center;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      border-right: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .step:last-child { border-right: none; }
+    .step.active { color: var(--accent); background: #0d2e0d; }
+    .step.done   { color: var(--muted);  background: #111; }
+    .step-num { display: block; font-size: 1rem; margin-bottom: 0.15rem; }
+
+    /* ── Secciones del form ── */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .section-title {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Campos ── */
+    .field { margin-bottom: 1.25rem; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    label {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.35rem;
+    }
+    label .req { color: var(--accent); margin-left: 2px; }
+    label .opt { color: var(--muted); font-size: 0.6rem; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      font-family: inherit;
+      font-size: 0.8rem;
+      padding: 0.55rem 0.75rem;
+      outline: none;
+      transition: border-color 0.15s;
+      -webkit-appearance: none;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+    input.invalid, select.invalid, textarea.invalid { border-color: var(--error); }
+    textarea { resize: vertical; min-height: 80px; }
+    select { cursor: pointer; }
+
+    /* Color picker */
+    .color-field {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .color-field input[type="color"] {
+      width: 40px;
+      height: 34px;
+      padding: 2px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .color-field input[type="text"] { flex: 1; }
+
+    /* Tipo de negocio */
+    .tipo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .tipo-option { display: none; }
+    .tipo-label {
+      display: block;
+      border: 1px solid var(--border);
+      padding: 0.75rem 0.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-size: 0.75rem;
+    }
+    .tipo-label:hover { border-color: var(--muted); }
+    .tipo-option:checked + .tipo-label {
+      border-color: var(--accent);
+      background: #0d2e0d;
+      color: var(--accent);
+    }
+    .tipo-icon { display: block; font-size: 1.5rem; margin-bottom: 0.25rem; }
+
+    /* Lista dinámica de productos */
+    .lista-items { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 0.5rem; }
+    .lista-item {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .lista-item input { flex: 1; }
+    .btn-remove {
+      width: 28px;
+      height: 28px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1rem;
+      flex-shrink: 0;
+      font-family: inherit;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-remove:hover { border-color: var(--error); color: var(--error); }
+    .btn-add {
+      background: transparent;
+      border: 1px dashed var(--border);
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 0.75rem;
+      padding: 0.4rem 0.75rem;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.15s;
+      letter-spacing: 0.05em;
+    }
+    .btn-add:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Horarios */
+    .horario-grid { display: flex; flex-direction: column; gap: 0.4rem; }
+    .horario-row {
+      display: grid;
+      grid-template-columns: 90px 1fr 1fr 32px;
+      gap: 0.4rem;
+      align-items: center;
+      font-size: 0.75rem;
+    }
+    .horario-dia { color: var(--muted); font-size: 0.7rem; }
+    .horario-row input[type="checkbox"] { width: 14px; height: 14px; cursor: pointer; }
+    .horario-row .closed-label { color: var(--muted); font-size: 0.7rem; grid-column: 2 / 4; }
+
+    /* Redes sociales */
+    .red-row {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+      align-items: center;
+    }
+    .red-nombre { font-size: 0.7rem; color: var(--muted); }
+
+    /* Presupuesto slider */
+    .presupuesto-wrap { display: flex; gap: 1rem; align-items: center; }
+    input[type="range"] {
+      flex: 1;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+    .presupuesto-val { min-width: 80px; text-align: right; color: var(--accent); font-size: 0.8rem; }
+
+    /* Navegación */
+    .nav-btns {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .btn {
+      padding: 0.6rem 1.5rem;
+      font-family: inherit;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--fg);
+      transition: all 0.15s;
+    }
+    .btn:hover { background: var(--surface); }
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      font-weight: bold;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Error inline */
+    .field-error { color: var(--error); font-size: 0.65rem; margin-top: 0.25rem; display: none; }
+    .field-error.visible { display: block; }
+
+    /* Resultado final */
+    #resultado { display: none; }
+    .resultado-box {
+      border: 1px solid var(--accent);
+      background: #0d2e0d;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .resultado-titulo { color: var(--accent); font-size: 0.8rem; font-weight: bold; margin-bottom: 0.5rem; }
+    pre {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      overflow-x: auto;
+      font-size: 0.7rem;
+      line-height: 1.5;
+      max-height: 320px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+    .btn-download {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.5rem 1.25rem;
+      background: var(--accent);
+      color: #000;
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      .field-row { grid-template-columns: 1fr; }
+      .tipo-grid  { grid-template-columns: repeat(2, 1fr); }
+      .horario-row { grid-template-columns: 70px 1fr 1fr 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <span class="logo">CRV STUDIO</span>
+  <span class="header-sub">Onboarding de cliente nuevo</span>
+</header>
+
+<div class="container">
+
+  <!-- Indicador de pasos -->
+  <div class="steps" id="steps">
+    <div class="step active" onclick="irA(0)"><span class="step-num">1</span>Negocio</div>
+    <div class="step"        onclick="irA(1)"><span class="step-num">2</span>Contacto</div>
+    <div class="step"        onclick="irA(2)"><span class="step-num">3</span>Marca</div>
+    <div class="step"        onclick="irA(3)"><span class="step-num">4</span>Servicios</div>
+    <div class="step"        onclick="irA(4)"><span class="step-num">5</span>Proyecto</div>
+  </div>
+
+  <form id="form" novalidate>
+
+    <!-- ══ PASO 1: Negocio ══ -->
+    <div class="section active" id="sec-0">
+      <div class="section-title">Información del negocio</div>
+
+      <div class="field">
+        <label>Nombre del negocio <span class="req">*</span></label>
+        <input type="text" id="nombre_negocio" placeholder="Ej: La Mantecosa" />
+        <div class="field-error" id="err-nombre_negocio">Requerido</div>
+      </div>
+
+      <div class="field">
+        <label>Tipo de negocio <span class="req">*</span></label>
+        <div class="tipo-grid" id="tipo-grid">
+          <div>
+            <input type="radio" name="tipo" id="t-heladeria" value="heladeria" class="tipo-option" />
+            <label class="tipo-label" for="t-heladeria"><span class="tipo-icon">🍦</span>Heladería</label>
+          </div>
+          <div>
+            <input type="radio" name="tipo" id="t-barberia" value="barberia" class="tipo-option" />
+            <label class="tipo-label" for="t-barberia"><span class="tipo-icon">✂️</span>Barbería</label>
+          </div>
+          <div>
+            <input type="radio" name="tipo" id="t-restaurant" value="restaurant" class="tipo-option" />
+            <label class="tipo-label" for="t-restaurant"><span class="tipo-icon">🍽️</span>Restaurant</label>
+          </div>
+          <div>
+            <input type="radio" name="tipo" id="t-ecommerce" value="ecommerce" class="tipo-option" />
+            <label class="tipo-label" for="t-ecommerce"><span class="tipo-icon">🛒</span>E-commerce</label>
+          </div>
+          <div>
+            <input type="radio" name="tipo" id="t-cafe" value="cafe" class="tipo-option" />
+            <label class="tipo-label" for="t-cafe"><span class="tipo-icon">☕</span>Cafetería</label>
+          </div>
+          <div>
+            <input type="radio" name="tipo" id="t-otro" value="otro" class="tipo-option" />
+            <label class="tipo-label" for="t-otro"><span class="tipo-icon">💼</span>Otro</label>
+          </div>
+        </div>
+        <div class="field-error" id="err-tipo">Seleccioná un tipo</div>
+      </div>
+
+      <div class="field">
+        <label>Descripción breve <span class="req">*</span></label>
+        <textarea id="descripcion" placeholder="¿Qué hace tu negocio? ¿Qué lo hace único? (2-3 oraciones)"></textarea>
+        <div class="field-error" id="err-descripcion">Requerido</div>
+      </div>
+
+      <div class="field">
+        <label>Ubicación / Dirección <span class="req">*</span></label>
+        <input type="text" id="ubicacion" placeholder="Ej: Av. San Martín 450, Neuquén" />
+        <div class="field-error" id="err-ubicacion">Requerido</div>
+      </div>
+
+      <div class="field">
+        <label>Horarios de atención</label>
+        <div class="horario-grid" id="horarios-grid">
+          <!-- Generado por JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PASO 2: Contacto ══ -->
+    <div class="section" id="sec-1">
+      <div class="section-title">Datos de contacto</div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Nombre del responsable <span class="req">*</span></label>
+          <input type="text" id="responsable" placeholder="Ej: Martina García" />
+          <div class="field-error" id="err-responsable">Requerido</div>
+        </div>
+        <div class="field">
+          <label>Teléfono / WhatsApp <span class="req">*</span></label>
+          <input type="tel" id="telefono" placeholder="+54 299 XXX-XXXX" />
+          <div class="field-error" id="err-telefono">Requerido</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Email de contacto <span class="req">*</span></label>
+        <input type="email" id="email" placeholder="hola@lamantecosa.com" />
+        <div class="field-error" id="err-email">Email inválido</div>
+      </div>
+
+      <div class="field">
+        <label>Redes sociales <span class="opt">(opcional)</span></label>
+        <div class="red-row"><span class="red-nombre">Instagram</span><input type="url" id="ig" placeholder="https://instagram.com/tu_negocio" /></div>
+        <div class="red-row"><span class="red-nombre">Facebook</span><input type="url" id="fb" placeholder="https://facebook.com/tu_negocio" /></div>
+        <div class="red-row"><span class="red-nombre">TikTok</span><input type="url" id="tt" placeholder="https://tiktok.com/@tu_negocio" /></div>
+        <div class="red-row"><span class="red-nombre">Web actual</span><input type="url" id="web" placeholder="https://tu-web-actual.com" /></div>
+      </div>
+    </div>
+
+    <!-- ══ PASO 3: Marca ══ -->
+    <div class="section" id="sec-2">
+      <div class="section-title">Identidad de marca</div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Color primario <span class="req">*</span></label>
+          <div class="color-field">
+            <input type="color" id="color-primario-picker" value="#a0ff6f" oninput="syncColor('primario')" />
+            <input type="text"  id="color_primario" value="#a0ff6f" oninput="syncPicker('primario')" placeholder="#000000" maxlength="7" />
+          </div>
+          <div class="field-error" id="err-color_primario">Color inválido</div>
+        </div>
+        <div class="field">
+          <label>Color secundario <span class="opt">(opcional)</span></label>
+          <div class="color-field">
+            <input type="color" id="color-secundario-picker" value="#111111" oninput="syncColor('secundario')" />
+            <input type="text"  id="color_secundario" value="#111111" oninput="syncPicker('secundario')" placeholder="#ffffff" maxlength="7" />
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Estilo visual preferido</label>
+        <select id="estilo">
+          <option value="">— Elegí un estilo —</option>
+          <option value="minimalista">Minimalista y limpio</option>
+          <option value="colorido">Colorido y vibrante</option>
+          <option value="elegante">Elegante y oscuro</option>
+          <option value="rustico">Rústico y artesanal</option>
+          <option value="moderno">Moderno y tech</option>
+          <option value="clasico">Clásico y tradicional</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Referencias visuales <span class="opt">(opcional)</span></label>
+        <textarea id="referencias" placeholder="Webs o negocios que te gusten por su diseño. Ej: 'Me gusta el estilo de Apple.com' o 'Algo similar a OG Barber pero con colores cálidos'"></textarea>
+      </div>
+
+      <div class="field">
+        <label>¿Tienen logo? <span class="opt">(opcional)</span></label>
+        <select id="tiene_logo">
+          <option value="no">No, necesitamos uno</option>
+          <option value="si-digital">Sí, en formato digital (PNG/SVG)</option>
+          <option value="si-foto">Sí, solo en foto/papel</option>
+          <option value="provisional">Tenemos algo provisional</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ══ PASO 4: Servicios ══ -->
+    <div class="section" id="sec-3">
+      <div class="section-title">Productos y servicios</div>
+
+      <div class="field">
+        <label>Lista de productos / servicios <span class="req">*</span></label>
+        <div class="lista-items" id="productos-list"></div>
+        <button type="button" class="btn-add" onclick="agregarItem('productos-list', 'producto')">+ Agregar producto o servicio</button>
+        <div class="field-error" id="err-productos">Agregá al menos un producto o servicio</div>
+      </div>
+
+      <div class="field">
+        <label>¿Necesitan sistema de turnos / reservas?</label>
+        <select id="necesita_turnos">
+          <option value="no">No</option>
+          <option value="si">Sí</option>
+          <option value="quizas">No sé, quizás</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>¿Necesitan carrito / pagos online?</label>
+        <select id="necesita_pagos">
+          <option value="no">No por ahora</option>
+          <option value="si-mercadopago">Sí — MercadoPago</option>
+          <option value="si-stripe">Sí — Stripe</option>
+          <option value="consultar">A definir</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>¿Necesitan panel de administración?</label>
+        <select id="necesita_admin">
+          <option value="basico">Básico (editar textos/precios)</option>
+          <option value="completo">Completo (CRUD de productos)</option>
+          <option value="no">No, por ahora no</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ══ PASO 5: Proyecto ══ -->
+    <div class="section" id="sec-4">
+      <div class="section-title">Detalles del proyecto</div>
+
+      <div class="field">
+        <label>Presupuesto aproximado <span class="opt">(opcional)</span></label>
+        <div class="presupuesto-wrap">
+          <input type="range" id="presupuesto-slider" min="0" max="8" step="1" value="0" oninput="updatePresupuesto()" />
+          <span class="presupuesto-val" id="presupuesto-val">A definir</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Fecha límite deseada <span class="opt">(opcional)</span></label>
+        <input type="text" id="deadline" placeholder="Ej: fin de julio 2026, o 'lo antes posible'" />
+      </div>
+
+      <div class="field">
+        <label>¿Tienen dominio propio?</label>
+        <select id="dominio">
+          <option value="no">No, necesitamos uno</option>
+          <option value="si">Sí, ya tenemos</option>
+          <option value="quizas">Todavía no decidimos</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Requisitos especiales <span class="opt">(opcional)</span></label>
+        <textarea id="requisitos" placeholder="Integraciones específicas, funciones particulares, restricciones técnicas, idiomas, accesibilidad, etc."></textarea>
+      </div>
+
+      <div class="field">
+        <label>Notas adicionales para CRV <span class="opt">(opcional)</span></label>
+        <textarea id="notas" placeholder="Lo que sea importante que sepamos y no esté contemplado arriba."></textarea>
+      </div>
+    </div>
+
+    <!-- Resultado -->
+    <div id="resultado">
+      <div class="section-title" style="margin-bottom:1rem">✅ Datos del cliente listos</div>
+      <div class="resultado-box">
+        <div class="resultado-titulo">JSON generado</div>
+        <pre id="json-preview"></pre>
+        <button type="button" class="btn-download" onclick="descargarJSON()">⬇ Descargar JSON</button>
+      </div>
+      <div style="color:var(--muted);font-size:0.75rem;margin-top:1rem;line-height:1.8">
+        <strong style="color:var(--fg)">Próximos pasos:</strong><br>
+        1. Guardá el JSON descargado<br>
+        2. Corré: <code style="color:var(--accent)">node scripts/process-client-data.js ruta/al/archivo.json</code><br>
+        3. Revisá los archivos generados: <code style="color:var(--accent)">prompt.md</code> y <code style="color:var(--accent)">client-brief.md</code><br>
+        4. Pasá el <code style="color:var(--accent)">prompt.md</code> a Claude Code para arrancar el proyecto
+      </div>
+      <div class="nav-btns">
+        <button type="button" class="btn" onclick="volver()">← Editar datos</button>
+        <button type="button" class="btn btn-primary" onclick="descargarJSON()">⬇ Descargar JSON</button>
+      </div>
+    </div>
+
+    <!-- Botones de navegación -->
+    <div class="nav-btns" id="nav-btns">
+      <button type="button" class="btn" id="btn-prev" onclick="anterior()" disabled>← Anterior</button>
+      <button type="button" class="btn btn-primary" id="btn-next" onclick="siguiente()">Siguiente →</button>
+    </div>
+  </form>
+</div>
+
+<script>
+// =============================================================
+// Config
+// =============================================================
+const DIAS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+const PRESUPUESTOS = ['A definir','Hasta $200k','$200k–$500k','$500k–$1M','$1M–$2M','$2M–$5M','$5M–$10M','$10M–$20M','Más de $20M'];
+const TOTAL_PASOS = 5;
+let pasoActual = 0;
+let jsonGenerado = null;
+
+// =============================================================
+// Init
+// =============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  generarHorarios();
+  agregarItem('productos-list', 'producto');
+  agregarItem('productos-list', 'producto');
+  updatePresupuesto();
+});
+
+function generarHorarios() {
+  const grid = document.getElementById('horarios-grid');
+  grid.innerHTML = DIAS.map((dia, i) => `
+    <div class="horario-row" id="horario-row-${i}">
+      <span class="horario-dia">${dia}</span>
+      <input type="time" id="h-desde-${i}" value="09:00" />
+      <input type="time" id="h-hasta-${i}" value="20:00" />
+      <input type="checkbox" id="h-cerrado-${i}" title="Cerrado" onchange="toggleCerrado(${i})" />
+    </div>
+  `).join('');
+}
+
+function toggleCerrado(i) {
+  const cerrado = document.getElementById(`h-cerrado-${i}`).checked;
+  document.getElementById(`h-desde-${i}`).disabled = cerrado;
+  document.getElementById(`h-hasta-${i}`).disabled = cerrado;
+  document.getElementById(`h-desde-${i}`).style.opacity = cerrado ? '0.3' : '1';
+  document.getElementById(`h-hasta-${i}`).style.opacity = cerrado ? '0.3' : '1';
+}
+
+function updatePresupuesto() {
+  const val = parseInt(document.getElementById('presupuesto-slider').value);
+  document.getElementById('presupuesto-val').textContent = PRESUPUESTOS[val];
+}
+
+// =============================================================
+// Lista dinámica de productos
+// =============================================================
+function agregarItem(listId, tipo) {
+  const lista = document.getElementById(listId);
+  const i = lista.children.length;
+  const div = document.createElement('div');
+  div.className = 'lista-item';
+  div.innerHTML = `
+    <input type="text" placeholder="${tipo === 'producto' ? `Producto/servicio ${i + 1}` : `Item ${i + 1}`}" />
+    <button type="button" class="btn-remove" onclick="this.parentElement.remove()" title="Eliminar">×</button>
+  `;
+  lista.appendChild(div);
+}
+
+// =============================================================
+// Colores
+// =============================================================
+function syncColor(tipo) {
+  const picker = document.getElementById(`color-${tipo}-picker`);
+  document.getElementById(`color_${tipo}`).value = picker.value;
+}
+function syncPicker(tipo) {
+  const txt = document.getElementById(`color_${tipo}`).value;
+  if (/^#[0-9a-fA-F]{6}$/.test(txt)) {
+    document.getElementById(`color-${tipo}-picker`).value = txt;
+  }
+}
+
+// =============================================================
+// Validación por paso
+// =============================================================
+function validarPaso(paso) {
+  let ok = true;
+
+  const limpiar = (ids) => ids.forEach(id => {
+    const el = document.getElementById(id);
+    const err = document.getElementById(`err-${id}`);
+    if (el) el.classList.remove('invalid');
+    if (err) err.classList.remove('visible');
+  });
+
+  const marcarError = (id, msg) => {
+    const el = document.getElementById(id);
+    const err = document.getElementById(`err-${id}`);
+    if (el) el.classList.add('invalid');
+    if (err) { if (msg) err.textContent = msg; err.classList.add('visible'); }
+    ok = false;
+  };
+
+  if (paso === 0) {
+    limpiar(['nombre_negocio','tipo','descripcion','ubicacion']);
+    if (!v('nombre_negocio')) marcarError('nombre_negocio');
+    if (!document.querySelector('input[name="tipo"]:checked')) marcarError('tipo');
+    if (!v('descripcion')) marcarError('descripcion');
+    if (!v('ubicacion')) marcarError('ubicacion');
+  }
+
+  if (paso === 1) {
+    limpiar(['responsable','telefono','email']);
+    if (!v('responsable')) marcarError('responsable');
+    if (!v('telefono')) marcarError('telefono');
+    const email = v('email');
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) marcarError('email', 'Email inválido');
+  }
+
+  if (paso === 2) {
+    limpiar(['color_primario']);
+    const hex = v('color_primario');
+    if (!hex || !/^#[0-9a-fA-F]{6}$/.test(hex)) marcarError('color_primario', 'Formato inválido (ej: #ff0000)');
+  }
+
+  if (paso === 3) {
+    limpiar(['productos']);
+    const items = [...document.querySelectorAll('#productos-list input')].map(i => i.value.trim()).filter(Boolean);
+    if (!items.length) marcarError('productos', 'Agregá al menos un producto o servicio');
+  }
+
+  return ok;
+}
+
+function v(id) { return document.getElementById(id)?.value?.trim() || ''; }
+
+// =============================================================
+// Navegación
+// =============================================================
+function irA(paso) {
+  if (paso > pasoActual && !validarPaso(pasoActual)) return;
+  document.getElementById(`sec-${pasoActual}`)?.classList.remove('active');
+  document.querySelectorAll('.step')[pasoActual]?.classList.remove('active');
+  document.querySelectorAll('.step')[pasoActual]?.classList.add('done');
+
+  pasoActual = paso;
+  document.getElementById(`sec-${pasoActual}`)?.classList.add('active');
+  document.querySelectorAll('.step')[pasoActual]?.classList.add('active');
+  document.querySelectorAll('.step')[pasoActual]?.classList.remove('done');
+
+  document.getElementById('btn-prev').disabled = pasoActual === 0;
+  document.getElementById('btn-next').textContent = pasoActual === TOTAL_PASOS - 1 ? 'Generar JSON ✓' : 'Siguiente →';
+}
+
+function siguiente() {
+  if (!validarPaso(pasoActual)) return;
+  if (pasoActual === TOTAL_PASOS - 1) { generarYMostrar(); return; }
+  irA(pasoActual + 1);
+}
+
+function anterior() { if (pasoActual > 0) irA(pasoActual - 1); }
+
+function volver() {
+  document.getElementById('resultado').style.display = 'none';
+  document.getElementById('nav-btns').style.display = 'flex';
+  document.getElementById(`sec-${pasoActual}`)?.classList.add('active');
+}
+
+// =============================================================
+// Recolectar datos y generar JSON
+// =============================================================
+function recolectarDatos() {
+  const horarios = {};
+  DIAS.forEach((dia, i) => {
+    const cerrado = document.getElementById(`h-cerrado-${i}`)?.checked;
+    horarios[dia.toLowerCase()] = cerrado ? 'cerrado' : {
+      desde: document.getElementById(`h-desde-${i}`)?.value || '09:00',
+      hasta: document.getElementById(`h-hasta-${i}`)?.value || '20:00',
+    };
+  });
+
+  const productos = [...document.querySelectorAll('#productos-list input')]
+    .map(i => i.value.trim()).filter(Boolean);
+
+  const presupuestoIdx = parseInt(document.getElementById('presupuesto-slider').value);
+
+  return {
+    meta: {
+      generado: new Date().toISOString(),
+      version: '1.0',
+      fuente: 'CRV Studio Onboarding Form',
+    },
+    negocio: {
+      nombre:      v('nombre_negocio'),
+      tipo:        document.querySelector('input[name="tipo"]:checked')?.value || '',
+      descripcion: v('descripcion'),
+      ubicacion:   v('ubicacion'),
+      horarios,
+    },
+    contacto: {
+      responsable: v('responsable'),
+      telefono:    v('telefono'),
+      email:       v('email'),
+      redes: {
+        instagram:  v('ig')  || null,
+        facebook:   v('fb')  || null,
+        tiktok:     v('tt')  || null,
+        web_actual: v('web') || null,
+      },
+    },
+    marca: {
+      color_primario:   v('color_primario'),
+      color_secundario: v('color_secundario') || null,
+      estilo:           v('estilo') || null,
+      referencias:      v('referencias') || null,
+      tiene_logo:       v('tiene_logo'),
+    },
+    servicios: {
+      productos,
+      necesita_turnos: v('necesita_turnos'),
+      necesita_pagos:  v('necesita_pagos'),
+      necesita_admin:  v('necesita_admin'),
+    },
+    proyecto: {
+      presupuesto:  presupuestoIdx > 0 ? PRESUPUESTOS[presupuestoIdx] : null,
+      deadline:     v('deadline') || null,
+      dominio:      v('dominio'),
+      requisitos:   v('requisitos') || null,
+      notas:        v('notas') || null,
+    },
+  };
+}
+
+function generarYMostrar() {
+  jsonGenerado = recolectarDatos();
+  document.getElementById('json-preview').textContent = JSON.stringify(jsonGenerado, null, 2);
+
+  // Ocultar form y nav, mostrar resultado
+  for (let i = 0; i < TOTAL_PASOS; i++) {
+    document.getElementById(`sec-${i}`)?.classList.remove('active');
+  }
+  document.getElementById('nav-btns').style.display = 'none';
+  document.getElementById('resultado').style.display = 'block';
+
+  // Marcar todos los pasos como done
+  document.querySelectorAll('.step').forEach(s => { s.classList.remove('active'); s.classList.add('done'); });
+}
+
+function descargarJSON() {
+  if (!jsonGenerado) return;
+  const nombre = jsonGenerado.negocio.nombre
+    .toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || 'cliente';
+  const blob = new Blob([JSON.stringify(jsonGenerado, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = `crv-onboarding-${nombre}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>

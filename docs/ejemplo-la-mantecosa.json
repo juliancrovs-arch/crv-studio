@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "generado": "2026-06-29T15:30:00.000Z",
+    "version": "1.0",
+    "fuente": "CRV Studio Onboarding Form"
+  },
+  "negocio": {
+    "nombre": "La Mantecosa",
+    "tipo": "heladeria",
+    "descripcion": "Heladería artesanal en el corazón de Neuquén. Elaboramos helados con leche fresca de tambo local y frutas de temporada. Más de 40 sabores rotativos, opciones veganas y sin TACC.",
+    "ubicacion": "Av. Argentina 1250, Neuquén Capital, Neuquén",
+    "horarios": {
+      "lunes":    { "desde": "12:00", "hasta": "23:00" },
+      "martes":   { "desde": "12:00", "hasta": "23:00" },
+      "miércoles":{ "desde": "12:00", "hasta": "23:00" },
+      "jueves":   { "desde": "12:00", "hasta": "23:30" },
+      "viernes":  { "desde": "12:00", "hasta": "00:00" },
+      "sábado":   { "desde": "11:00", "hasta": "00:30" },
+      "domingo":  { "desde": "11:00", "hasta": "23:00" }
+    }
+  },
+  "contacto": {
+    "responsable": "Valentina Romero",
+    "telefono": "+54 299 472-8831",
+    "email": "hola@lamantecosa.com.ar",
+    "redes": {
+      "instagram":  "https://instagram.com/lamantecosa.nqn",
+      "facebook":   "https://facebook.com/lamantecosaneuquen",
+      "tiktok":     null,
+      "web_actual": null
+    }
+  },
+  "marca": {
+    "color_primario":   "#d4a847",
+    "color_secundario": "#1a0f00",
+    "estilo":           "rustico",
+    "referencias":      "Algo cálido y artesanal, como Dulce de Leche Havanna pero más moderno. Que transmita calidad y cercanía.",
+    "tiene_logo":       "si-digital"
+  },
+  "servicios": {
+    "productos": [
+      "Helado artesanal por kilo",
+      "Cucuruchos y vasitos",
+      "Paletas artesanales",
+      "Tortas heladas (por encargo)",
+      "Sandwiches de helado",
+      "Helado vegano (base coco/almendra)",
+      "Opciones sin TACC",
+      "Alfajores de helado (temporada verano)"
+    ],
+    "necesita_turnos": "no",
+    "necesita_pagos":  "no",
+    "necesita_admin":  "basico"
+  },
+  "proyecto": {
+    "presupuesto":  "$500k–$1M",
+    "deadline":     "antes de diciembre 2026 (inicio de temporada alta)",
+    "dominio":      "quizas",
+    "requisitos":   "Que la web cargue rápido en celular porque los clientes la van a ver desde la calle. Mostrar sabores del día que podamos actualizar fácil. WhatsApp directo para pedidos de tortas.",
+    "notas":        "Valentina quiere poder actualizar los sabores del día sin pedirle a un técnico. Panel admin básico es suficiente."
+  }
+}
