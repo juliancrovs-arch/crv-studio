@@ -11,7 +11,7 @@ database_id = "a84b6498-3f1d-49f9-b16a-0403d9201705"
 # KV Namespace para rate limiting
 [[kv_namespaces]]
 binding = "RATE_LIMITS"
-id = "xxx"
+id = "8ff0b0d1ecdd457fa2ceba2571dfd55f"
 
 [vars]
 ENVIRONMENT = "development"
@@ -35,4 +35,4 @@ database_id = "a84b6498-3f1d-49f9-b16a-0403d9201705"
 
 [[env.production.kv_namespaces]]
 binding = "RATE_LIMITS"
-id = "xxx"
+id = "c0ac4c74357b4927a6f2ff470fce4263"
