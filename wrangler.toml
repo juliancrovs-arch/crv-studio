@@ -1,0 +1,38 @@
+name = "crv-studio"
+compatibility_date = "2025-01-15"
+main = "src/workers/orchestrator.js"
+
+# Base de datos D1 (local y producción comparten el mismo binding "DB")
+[[d1_databases]]
+binding = "DB"
+database_name = "crv-studio"
+database_id = "xxx"
+
+# KV Namespace para rate limiting
+[[kv_namespaces]]
+binding = "RATE_LIMITS"
+id = "xxx"
+
+[vars]
+ENVIRONMENT = "development"
+ALLOWED_ORIGIN = "http://localhost:3456"
+
+[env.production]
+name = "crv-studio-prod"
+
+[env.production.vars]
+ENVIRONMENT = "production"
+ALLOWED_ORIGIN = "https://crv.studio"
+
+# En producción, ANTHROPIC_API_KEY se configura como secret:
+#   wrangler secret put ANTHROPIC_API_KEY --env production
+# Nunca hardcodear aquí.
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "crv-studio"
+database_id = "xxx"
+
+[[env.production.kv_namespaces]]
+binding = "RATE_LIMITS"
+id = "xxx"

@@ -65,7 +65,12 @@ export default {
 
       // GET /api/health
       if (pathname === '/api/health') {
-        return json({ status: 'ok', ts: new Date().toISOString() }, headers);
+        return json({
+          status: 'ok',
+          version: '1.0',
+          ts: new Date().toISOString(),
+          api_key_configurada: !!env.ANTHROPIC_API_KEY,
+        }, headers);
       }
 
       return json({ error: 'Ruta no encontrada' }, headers, 404);
@@ -239,6 +244,14 @@ async function ejecutarAgenteConReintentos(agente, contexto, projectId, env) {
 // =============================================================
 
 async function llamarClaude(agente, contexto, env) {
+  if (!env.ANTHROPIC_API_KEY) {
+    throw new Error(
+      'ANTHROPIC_API_KEY no configurada. ' +
+      'En dev: agregá ANTHROPIC_API_KEY=sk-ant-... a .dev.vars. ' +
+      'En prod: wrangler secret put ANTHROPIC_API_KEY --env production'
+    );
+  }
+
   const modelo = MODELOS[agente];
   const systemPrompt = construirSystemPrompt(agente, contexto);
   const userMessage = construirUserMessage(agente, contexto);
