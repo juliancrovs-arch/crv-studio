@@ -6,7 +6,7 @@ main = "src/workers/orchestrator.js"
 [[d1_databases]]
 binding = "DB"
 database_name = "crv-studio"
-database_id = "xxx"
+database_id = "a84b6498-3f1d-49f9-b16a-0403d9201705"
 
 # KV Namespace para rate limiting
 [[kv_namespaces]]
@@ -31,7 +31,7 @@ ALLOWED_ORIGIN = "https://crv.studio"
 [[env.production.d1_databases]]
 binding = "DB"
 database_name = "crv-studio"
-database_id = "xxx"
+database_id = "a84b6498-3f1d-49f9-b16a-0403d9201705"
 
 [[env.production.kv_namespaces]]
 binding = "RATE_LIMITS"
