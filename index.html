@@ -1,336 +1,484 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRV Estudio</title>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #0a0a0a;
-            color: #ffffff;
-            overflow-x: hidden;
-        }
-        
-        #tsparticles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-        
-        .content { position: relative; z-index: 10; }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 2rem 3rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            background: rgba(10, 10, 10, 0.9);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .logo { font-size: 1.4rem; font-weight: 700; letter-spacing: 2px; }
-        
-        nav ul { display: flex; list-style: none; gap: 3rem; font-size: 0.9rem; }
-        nav ul li a { color: #888; transition: color 0.3s; }
-        nav ul li a:hover { color: #fff; }
-        
-        .nav-contact {
-            padding: 0.7rem 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            background: transparent;
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.3s;
-            border-radius: 6px;
-        }
-        .nav-contact:hover { border-color: #fff; background: rgba(255, 255, 255, 0.1); }
-        
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 4rem 3rem;
-            text-align: center;
-        }
-        
-        .hero h1 { font-size: clamp(2.5rem, 8vw, 5rem); margin-bottom: 1.5rem; }
-        .hero-subtitle { font-size: 1.3rem; color: #888; margin-bottom: 3rem; }
-        
-        .cta-buttons { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
-        
-        .btn {
-            padding: 1rem 2.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            background: transparent;
-            color: #fff;
-            cursor: pointer;
-            text-transform: uppercase;
-            border-radius: 6px;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary { background: #fff; color: #000; border-color: #fff; }
-        .btn-primary:hover { background: #000; color: #fff; }
-        .btn-secondary:hover { border-color: #fff; background: rgba(255, 255, 255, 0.1); }
-        
-        .scroll-indicator {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #555;
-            animation: bounce 2s infinite;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(10px); }
-        }
-        
-        .services { padding: 6rem 3rem; max-width: 1400px; margin: 0 auto; }
-        .section-title { font-size: 2.5rem; margin-bottom: 4rem; text-align: center; }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        
-        .service-card {
-            padding: 2.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-        .service-card:hover { border-color: rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.05); transform: translateY(-8px); }
-        .service-card h3 { font-size: 1.3rem; margin-bottom: 1rem; }
-        .service-card p { color: #888; }
-        
-        .portfolio { padding: 6rem 3rem; max-width: 1400px; margin: 0 auto; }
-        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; }
-        
-        .portfolio-item {
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.02);
-            overflow: hidden;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-        .portfolio-item:hover { border-color: rgba(255, 255, 255, 0.3); transform: translateY(-12px); }
-        
-        .portfolio-image { width: 100%; height: 280px; overflow: hidden; }
-        .portfolio-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-        .portfolio-item:hover .portfolio-image img { transform: scale(1.05); }
-        
-        .portfolio-info { padding: 2rem; }
-        .portfolio-info h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
-        .portfolio-info p { color: #888; margin-bottom: 1rem; }
-        
-        .portfolio-link { color: #888; border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 0.25rem; transition: all 0.3s; display: inline-block; }
-        .portfolio-link:hover { color: #fff; border-color: #fff; transform: translateX(4px); }
-        
-        .about {
-            padding: 6rem 3rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-        
-        .about h2 { font-size: 2.5rem; margin-bottom: 2rem; }
-        .about p { color: #888; margin-bottom: 1.5rem; line-height: 1.9; }
-        
-        .about-photo {
-            width: 100%;
-            height: 400px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            font-size: 4rem;
-        }
-        
-        footer { padding: 4rem 3rem; border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: 4rem; }
-        .footer-content { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; margin-bottom: 3rem; }
-        .footer-section h4 { margin-bottom: 1.5rem; color: #fff; text-transform: uppercase; }
-        .footer-section p, .footer-section a { color: #888; line-height: 1.8; }
-        .footer-section a:hover { color: #fff; }
-        .footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 2rem; text-align: center; color: #555; }
-        
-        @media (max-width: 768px) {
-            nav { flex-direction: column; gap: 1rem; padding: 1.5rem; }
-            nav ul { gap: 1rem; }
-            .about { grid-template-columns: 1fr; }
-            .footer-content { grid-template-columns: 1fr; }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="CRV Estudio — Diseño web, desarrollo y fotografía digital premium desde Patagonia." />
+  <title>CRV Estudio</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0a0a0a;
+      --surface: rgba(255,255,255,0.03);
+      --border:  rgba(255,255,255,0.08);
+      --fg:      #ffffff;
+      --muted:   #666;
+      --accent:  #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Fondo animado (CSS puro, sin JS) ── */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+    .bg-glow {
+      position: fixed;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .content { position: relative; z-index: 10; }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 3rem;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo { font-size: 1rem; font-weight: 700; letter-spacing: 0.2em; }
+
+    nav ul { display: flex; list-style: none; gap: 2.5rem; }
+    nav ul a { font-size: 0.85rem; color: var(--muted); transition: color 0.2s; }
+    nav ul a:hover { color: var(--fg); }
+
+    .nav-cta {
+      padding: 0.55rem 1.25rem;
+      border: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--fg);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .nav-cta:hover { border-color: var(--fg); background: rgba(255,255,255,0.06); }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+    }
+
+    .hero-tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      max-width: 800px;
+    }
+
+    .hero-sub {
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 3rem;
+    }
+
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+    .btn {
+      padding: 0.75rem 2rem;
+      font-size: 0.85rem;
+      font-family: inherit;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--fg);
+      transition: all 0.2s;
+      display: inline-block;
+    }
+    .btn:hover { border-color: var(--fg); background: rgba(255,255,255,0.06); }
+    .btn-primary { background: var(--fg); color: #000; border-color: var(--fg); font-weight: 600; }
+    .btn-primary:hover { background: rgba(255,255,255,0.85); }
+
+    .hero-scroll {
+      margin-top: 5rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      animation: fadeUp 3s ease infinite;
+    }
+    @keyframes fadeUp {
+      0%,100% { opacity: 0.3; transform: translateY(4px); }
+      50%      { opacity: 1;   transform: translateY(0); }
+    }
+
+    /* ── Secciones ── */
+    section { padding: 6rem 2rem; }
+    .inner { max-width: 1200px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 3.5rem;
+    }
+
+    /* ── Servicios ── */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px;
+      border: 1px solid var(--border);
+    }
+
+    .service-card {
+      padding: 2rem;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+    .service-card:hover { background: rgba(255,255,255,0.05); }
+    .service-icon { font-size: 1.5rem; margin-bottom: 1rem; display: block; }
+    .service-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.6rem; }
+    .service-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── Portfolio ── */
+    #portfolio { border-top: 1px solid var(--border); }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .portfolio-item {
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .portfolio-item:hover { border-color: rgba(255,255,255,0.25); }
+
+    .portfolio-img {
+      width: 100%;
+      height: 240px;
+      overflow: hidden;
+      background: #111;
+    }
+    .portfolio-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+      display: block;
+    }
+    .portfolio-item:hover .portfolio-img img { transform: scale(1.04); }
+
+    .portfolio-info { padding: 1.5rem; }
+    .portfolio-info h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .portfolio-info p { font-size: 0.82rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.6; }
+    .portfolio-link {
+      font-size: 0.78rem;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.15rem;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+    .portfolio-link:hover { color: var(--fg); border-color: var(--fg); }
+
+    /* ── Sobre mí ── */
+    #about { border-top: 1px solid var(--border); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.9;
+      margin-bottom: 1.25rem;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      border: 1px solid var(--border);
+    }
+    .stat {
+      padding: 1.5rem;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+    }
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.25rem;
+    }
+    .stat-label { font-size: 0.75rem; color: var(--muted); }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 2rem;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .footer-brand p { font-size: 0.85rem; color: var(--muted); margin-top: 0.75rem; line-height: 1.7; }
+    .footer-col h4 { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+    .footer-col a { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.5rem; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--fg); }
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.25rem; }
+      nav ul { display: none; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-bottom { flex-direction: column; gap: 0.5rem; }
+    }
+    @media (max-width: 480px) {
+      .portfolio-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-    <div id="tsparticles"></div>
-    
-    <div class="content">
-        <nav>
-            <div class="logo">CRV</div>
-            <ul>
-                <li><a href="#services">Servicios</a></li>
-                <li><a href="#portfolio">Trabajos</a></li>
-                <li><a href="#about">Sobre mí</a></li>
-            </ul>
-            <button class="nav-contact" onclick="document.querySelector('footer').scrollIntoView({behavior:'smooth'})">Conversemos</button>
-        </nav>
 
-        <section class="hero">
-            <div style="max-width: 900px;">
-                <h1>Experiencia Digital Premium</h1>
-                <p class="hero-subtitle">Diseño web, desarrollo a medida y fotografía digital para marcas que buscan diferenciarse</p>
-                <div class="cta-buttons">
-                    <button class="btn btn-primary" onclick="document.getElementById('portfolio').scrollIntoView({behavior:'smooth'})">Ver Trabajos</button>
-                    <button class="btn btn-secondary" onclick="document.querySelector('footer').scrollIntoView({behavior:'smooth'})">Conversemos</button>
-                </div>
-            </div>
-            <div class="scroll-indicator">↓ Explorar</div>
-        </section>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
 
-        <section class="services" id="services">
-            <h2 class="section-title">Servicios</h2>
-            <div class="services-grid">
-                <div class="service-card">
-                    <h3>🌐 Diseño Web</h3>
-                    <p>Sitios web a medida, minimalistas y de alto impacto. Diseño responsivo pensado en cada detalle.</p>
-                </div>
-                <div class="service-card">
-                    <h3>⚙️ Desarrollo</h3>
-                    <p>Stack moderno con Cloudflare Pages, Workers, D1. APIs, bases de datos, performance.</p>
-                </div>
-                <div class="service-card">
-                    <h3>📸 Fotografía</h3>
-                    <p>Fotografía profesional con edición avanzada. Eventos, productos, contenido de marca.</p>
-                </div>
-                <div class="service-card">
-                    <h3>💡 Consultoría</h3>
-                    <p>Estrategia digital, branding visual, optimización. Que tu marca llegue con impacto.</p>
-                </div>
-                <div class="service-card">
-                    <h3>🎨 Diseño UX/UI</h3>
-                    <p>Interfaces intuitivas, accesibles, hermosas. Experiencias en cada interacción.</p>
-                </div>
-                <div class="service-card">
-                    <h3>🚀 Performance</h3>
-                    <p>Speed, SEO, rendimiento. Webs rápidas que convierten visitas en resultados.</p>
-                </div>
-            </div>
-        </section>
+<div class="content">
 
-        <section class="portfolio" id="portfolio">
-            <h2 class="section-title">Trabajos Destacados</h2>
-            <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <div class="portfolio-image"><img src="images/los-crovas.png" alt="Los Crovas"></div>
-                    <div class="portfolio-info">
-                        <h3>Los Crovas</h3>
-                        <p>E-commerce artesanal con admin dinámico vía GitHub API. Diseño premium.</p>
-                        <a href="https://loscrovas.com.ar" target="_blank" class="portfolio-link">Ver sitio →</a>
-                    </div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-image"><img src="images/og-barber.png" alt="OG Barber"></div>
-                    <div class="portfolio-info">
-                        <h3>OG Barber Studio</h3>
-                        <p>Sistema de reservas completo, calendario con slots. Dark luxury design.</p>
-                        <a href="https://og-barber-studio.pages.dev/" target="_blank" class="portfolio-link">Ver sitio →</a>
-                    </div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-image"><img src="images/cafe-la-z.png" alt="Café La Z"></div>
-                    <div class="portfolio-info">
-                        <h3>Café La Z</h3>
-                        <p>Menú digital bilingüe con QR. Admin login, solución moderna.</p>
-                        <a href="https://cafeterialaz.pages.dev/" target="_blank" class="portfolio-link">Ver sitio →</a>
-                    </div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-image"><img src="images/22-sushi.png" alt="22 Sushi"></div>
-                    <div class="portfolio-info">
-                        <h3>22 Patagonia Sushi</h3>
-                        <p>Landing profesional con galería. Diseño minimalista de alta calidad.</p>
-                        <a href="https://22patagoniasushi.pages.dev/" target="_blank" class="portfolio-link">Ver sitio →</a>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <nav>
+    <span class="logo">CRV</span>
+    <ul>
+      <li><a href="#services">Servicios</a></li>
+      <li><a href="#portfolio">Trabajos</a></li>
+      <li><a href="#about">Sobre mí</a></li>
+    </ul>
+    <button class="nav-cta" onclick="document.querySelector('footer').scrollIntoView({behavior:'smooth'})">Conversemos</button>
+  </nav>
 
-        <section class="about" id="about">
-            <div>
-                <h2>Sobre Mí</h2>
-                <p>Soy Julián Crova, desarrollador y diseñador web con 6+ años en fotografía digital. Desde Esquel, Patagonia, trabajo con startups en Latam buscando presencia digital de impacto.</p>
-                <p>Mi enfoque: minimalista, estratégico, rápido. Webs sobrias que funcionan. Stack: Cloudflare Pages + Workers + D1, JavaScript moderno, design systems pensados.</p>
-                <p>Cuando no codifico, fotografío eventos, experimento con IA y cultivo interés en tech emergente. Cada proyecto es oportunidad de crear algo memorable.</p>
-            </div>
-            <div class="about-photo">📷</div>
-        </section>
-
-        <footer>
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>CRV Estudio</h4>
-                    <p>Diseño web, desarrollo y fotografía premium desde Patagonia.</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Enlaces</h4>
-                    <p><a href="#services">Servicios</a></p>
-                    <p><a href="#portfolio">Trabajos</a></p>
-                    <p><a href="#about">Sobre mí</a></p>
-                </div>
-                <div class="footer-section">
-                    <h4>Contacto</h4>
-                    <p><a href="mailto:julian@crv.studio">julian@crv.studio</a></p>
-                    <p><a href="https://instagram.com" target="_blank">Instagram</a></p>
-                    <p><a href="https://github.com/juliancrovs-arch" target="_blank">GitHub</a></p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 CRV Estudio. Todos los derechos reservados.</p>
-            </div>
-        </footer>
+  <!-- Hero -->
+  <section class="hero">
+    <p class="hero-tag">Patagonia Argentina · Desde Esquel</p>
+    <h1>Diseño web y<br>desarrollo premium</h1>
+    <p class="hero-sub">Sitios web de alto impacto para marcas que buscan diferenciarse. Rápidos, modernos y hechos a medida.</p>
+    <div class="hero-btns">
+      <a href="#portfolio" class="btn btn-primary">Ver trabajos</a>
+      <a href="#about" class="btn">Sobre mí</a>
     </div>
+    <p class="hero-scroll">↓ explorar</p>
+  </section>
 
-    <script>
-        tsParticles.load("tsparticles", {
-            particles: {
-                number: { value: 100, density: { enable: true, value_area: 800 } },
-                color: { value: "#ffffff" },
-                shape: { type: "circle" },
-                opacity: { value: 0.9, random: 0.2 },
-                size: { value: 4, random: 2 },
-                move: {
-                    enable: true,
-                    speed: 2,
-                    direction: "top",
-                    random: true,
-                    straight: false,
-                    outModes: { default: "out" }
-                }
-            },
-            interactivity: {
-                events: {
-                    onhover: { enable: true, mode: "repulse" },
-                    onclick: { enable: true, mode: "push" }
-                },
-                modes: {
-                    repulse: { distance: 100 },
-                    push: { particles_nb: 4 }
-                }
-            },
-            retina_detect: true
-        });
-    </script>
+  <!-- Servicios -->
+  <section id="services">
+    <div class="inner">
+      <p class="section-label">Qué hago</p>
+      <h2 class="section-title">Servicios</h2>
+      <div class="services-grid">
+        <div class="service-card">
+          <span class="service-icon">🌐</span>
+          <h3>Diseño Web</h3>
+          <p>Sitios minimalistas y de alto impacto. Responsivo, rápido, pensado en cada detalle.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">⚙️</span>
+          <h3>Desarrollo</h3>
+          <p>Cloudflare Pages + Workers + D1. APIs, bases de datos, rendimiento real.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">🤖</span>
+          <h3>IA Integrada</h3>
+          <p>Agentes conversacionales, automatización con Claude API, sistemas inteligentes.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">📸</span>
+          <h3>Fotografía</h3>
+          <p>Fotografía profesional con edición avanzada. Eventos, productos, contenido de marca.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">🎨</span>
+          <h3>UX / UI</h3>
+          <p>Interfaces intuitivas, accesibles y hermosas. Experiencia en cada interacción.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">🚀</span>
+          <h3>Performance</h3>
+          <p>Lighthouse 90+. SEO, velocidad, conversión. Webs que no solo se ven bien.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio -->
+  <section id="portfolio">
+    <div class="inner">
+      <p class="section-label">Proyectos</p>
+      <h2 class="section-title">Trabajos destacados</h2>
+      <div class="portfolio-grid">
+        <div class="portfolio-item">
+          <div class="portfolio-img"><img src="images/los-crovas.png" alt="Los Crovas" loading="lazy" /></div>
+          <div class="portfolio-info">
+            <h3>Los Crovas</h3>
+            <p>E-commerce artesanal con admin dinámico vía GitHub API. Diseño premium.</p>
+            <a href="https://loscrovas.com.ar" target="_blank" rel="noopener" class="portfolio-link">Ver sitio →</a>
+          </div>
+        </div>
+        <div class="portfolio-item">
+          <div class="portfolio-img"><img src="images/og-barber.png" alt="OG Barber Studio" loading="lazy" /></div>
+          <div class="portfolio-info">
+            <h3>OG Barber Studio</h3>
+            <p>Sistema de reservas completo, calendario con slots. Dark luxury design.</p>
+            <a href="https://og-barber-studio.pages.dev/" target="_blank" rel="noopener" class="portfolio-link">Ver sitio →</a>
+          </div>
+        </div>
+        <div class="portfolio-item">
+          <div class="portfolio-img"><img src="images/cafe-la-z.png" alt="Café La Z" loading="lazy" /></div>
+          <div class="portfolio-info">
+            <h3>Café La Z</h3>
+            <p>Menú digital bilingüe con QR. Admin login, solución moderna.</p>
+            <a href="https://cafeterialaz.pages.dev/" target="_blank" rel="noopener" class="portfolio-link">Ver sitio →</a>
+          </div>
+        </div>
+        <div class="portfolio-item">
+          <div class="portfolio-img"><img src="images/22-sushi.png" alt="22 Patagonia Sushi" loading="lazy" /></div>
+          <div class="portfolio-info">
+            <h3>22 Patagonia Sushi</h3>
+            <p>Landing profesional con galería. Diseño minimalista de alta calidad.</p>
+            <a href="https://22patagoniasushi.pages.dev/" target="_blank" rel="noopener" class="portfolio-link">Ver sitio →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sobre mí -->
+  <section id="about">
+    <div class="inner">
+      <p class="section-label">Quién soy</p>
+      <h2 class="section-title">Sobre mí</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>Soy Julián Crova, desarrollador y diseñador web con 6+ años en fotografía digital. Desde Patagonia, trabajo con negocios en Latam que buscan presencia digital de impacto.</p>
+          <p>Mi enfoque: minimalista, estratégico, rápido. Stack moderno — Cloudflare Pages + Workers + D1, JavaScript puro, design systems pensados para durar.</p>
+          <p>Cuando no codifico, fotografío eventos, experimento con IA y cultivo interés en tech emergente. Cada proyecto es una oportunidad de crear algo memorable.</p>
+        </div>
+        <div class="about-stats">
+          <div class="stat">
+            <div class="stat-num">5+</div>
+            <div class="stat-label">Clientes activos</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">90+</div>
+            <div class="stat-label">Lighthouse score</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">0</div>
+            <div class="stat-label">Frameworks innecesarios</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">∞</div>
+            <div class="stat-label">Café consumido</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo">CRV ESTUDIO</span>
+        <p>Diseño web, desarrollo y fotografía premium desde Patagonia Argentina.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <a href="#services">Servicios</a>
+        <a href="#portfolio">Trabajos</a>
+        <a href="#about">Sobre mí</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <a href="mailto:julian@crv.studio">julian@crv.studio</a>
+        <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://github.com/juliancrovs-arch" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 CRV Estudio</span>
+      <span>Hecho desde Patagonia 🏔️</span>
+    </div>
+  </footer>
+
+</div>
 </body>
 </html>
