@@ -22,11 +22,12 @@
       --black:   #080808;
       --grey-1:  #111111;
       --grey-2:  #1c1c1c;
-      --grey-3:  #2e2e2e;
-      --grey-4:  #555555;
-      --white:   #f0ede8;       /* blanco roto, no agresivo */
-      --red:     #c0392b;       /* rojo elegante, oscuro */
-      --red-dim: rgba(192,57,43,0.12);
+      --grey-3:  #333333;
+      --grey-4:  #888888;   /* subido de #555 → legible */
+      --grey-5:  #bbbbbb;   /* texto secundario medio */
+      --white:   #f2efe9;
+      --red:     #d63031;   /* rojo más vivo */
+      --red-dim: rgba(214,48,49,0.1);
 
       --font-title: 'Clash Display', sans-serif;
       --font-body:  'Satoshi', sans-serif;
@@ -40,10 +41,10 @@
       background: var(--black);
       color: var(--white);
       font-family: var(--font-body);
-      font-weight: 400;
-      line-height: 1.6;
+      font-weight: 500;
+      line-height: 1.7;
       overflow-x: hidden;
-      cursor: none; /* cursor personalizado */
+      cursor: none;
     }
 
     /* ── Cursor custom ── */
@@ -98,10 +99,10 @@
       gap: 2.5rem;
     }
     .nav-links a {
-      font-size: 0.78rem;
-      font-weight: 400;
-      letter-spacing: 0.08em;
-      color: var(--grey-4);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--grey-5);
       text-transform: uppercase;
       position: relative;
       transition: color 0.25s;
@@ -174,9 +175,9 @@
     }
 
     .hero-eyebrow {
-      font-size: 0.7rem;
-      letter-spacing: 0.35em;
-      color: var(--grey-4);
+      font-size: 0.78rem;
+      letter-spacing: 0.25em;
+      color: var(--grey-5);
       text-transform: uppercase;
       margin-bottom: 2rem;
       display: flex;
@@ -214,17 +215,17 @@
       margin-top: 2rem;
     }
     .hero-desc {
-      font-size: 0.9rem;
-      color: var(--grey-4);
-      max-width: 380px;
+      font-size: 1rem;
+      color: var(--grey-5);
+      max-width: 400px;
       line-height: 1.8;
     }
     .hero-scroll {
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      font-size: 0.65rem;
-      letter-spacing: 0.25em;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--grey-4);
     }
@@ -303,25 +304,25 @@
     .service-item:hover { padding-left: 1rem; }
 
     .service-num {
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       color: var(--red);
-      letter-spacing: 0.1em;
-      font-weight: 500;
+      letter-spacing: 0.08em;
+      font-weight: 600;
       position: relative;
     }
     .service-name {
       font-family: var(--font-title);
-      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-      font-weight: 500;
-      letter-spacing: -0.01em;
+      font-size: clamp(1.3rem, 2.5vw, 2rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
       position: relative;
     }
     .service-desc {
-      font-size: 0.8rem;
-      color: var(--grey-4);
-      max-width: 260px;
+      font-size: 0.88rem;
+      color: var(--grey-5);
+      max-width: 280px;
       text-align: right;
-      line-height: 1.7;
+      line-height: 1.75;
       position: relative;
     }
 
@@ -376,24 +377,24 @@
     .portfolio-row:hover { padding-left: 0.75rem; }
 
     .p-num {
-      font-size: 0.68rem;
+      font-size: 0.75rem;
       color: var(--red);
-      font-weight: 500;
-      letter-spacing: 0.1em;
+      font-weight: 600;
+      letter-spacing: 0.08em;
       position: relative;
     }
     .p-name {
       font-family: var(--font-title);
-      font-size: clamp(1.4rem, 3vw, 2.2rem);
-      font-weight: 500;
+      font-size: clamp(1.5rem, 3vw, 2.4rem);
+      font-weight: 600;
       letter-spacing: -0.02em;
       position: relative;
       transition: color 0.25s;
     }
     .p-tags {
-      font-size: 0.72rem;
-      color: var(--grey-4);
-      letter-spacing: 0.06em;
+      font-size: 0.85rem;
+      color: var(--grey-5);
+      letter-spacing: 0.04em;
       position: relative;
       text-align: right;
     }
@@ -479,9 +480,9 @@
     .about-title span { color: var(--red); }
 
     .about-text p {
-      font-size: 0.9rem;
-      color: var(--grey-4);
-      line-height: 1.9;
+      font-size: 1rem;
+      color: var(--grey-5);
+      line-height: 1.85;
       margin-bottom: 1.5rem;
     }
 
@@ -507,9 +508,9 @@
     }
     .stat-num span { color: var(--red); }
     .stat-label {
-      font-size: 0.72rem;
-      color: var(--grey-4);
-      letter-spacing: 0.08em;
+      font-size: 0.78rem;
+      color: var(--grey-5);
+      letter-spacing: 0.06em;
       text-transform: uppercase;
     }
 
@@ -517,8 +518,8 @@
     .about-right { padding-top: 0.5rem; }
 
     .stack-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.3em;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--red);
       margin-bottom: 1.5rem;
@@ -528,13 +529,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 0;
-      border-bottom: 1px solid rgba(240,237,232,0.06);
-      font-size: 0.85rem;
+      padding: 1.1rem 0;
+      border-bottom: 1px solid rgba(240,237,232,0.08);
+      font-size: 0.95rem;
     }
-    .stack-item:first-child { border-top: 1px solid rgba(240,237,232,0.06); }
-    .stack-item-name { font-weight: 500; }
-    .stack-item-use { font-size: 0.72rem; color: var(--grey-4); }
+    .stack-item:first-child { border-top: 1px solid rgba(240,237,232,0.08); }
+    .stack-item-name { font-weight: 600; }
+    .stack-item-use { font-size: 0.82rem; color: var(--grey-5); }
 
     /* ── CONTACTO ── */
     #contact {
@@ -558,25 +559,25 @@
       margin-bottom: 1.5rem;
     }
     .contact-desc {
-      font-size: 0.88rem;
-      color: var(--grey-4);
+      font-size: 1rem;
+      color: var(--grey-5);
       line-height: 1.8;
       margin-bottom: 2.5rem;
     }
-    .contact-links { display: flex; flex-direction: column; gap: 0.75rem; }
+    .contact-links { display: flex; flex-direction: column; gap: 0; }
     .contact-link-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 0;
-      border-bottom: 1px solid rgba(240,237,232,0.06);
-      font-size: 0.85rem;
+      padding: 1.1rem 0;
+      border-bottom: 1px solid rgba(240,237,232,0.08);
+      font-size: 0.95rem;
       transition: color 0.2s;
     }
-    .contact-link-item:first-child { border-top: 1px solid rgba(240,237,232,0.06); }
-    .contact-link-label { font-size: 0.65rem; color: var(--grey-4); letter-spacing: 0.15em; text-transform: uppercase; }
-    .contact-link-val { font-weight: 500; }
-    .contact-link-arrow { color: var(--grey-3); font-size: 0.85rem; transition: color 0.2s, transform 0.2s; }
+    .contact-link-item:first-child { border-top: 1px solid rgba(240,237,232,0.08); }
+    .contact-link-label { font-size: 0.72rem; color: var(--grey-4); letter-spacing: 0.12em; text-transform: uppercase; }
+    .contact-link-val { font-weight: 600; }
+    .contact-link-arrow { color: var(--grey-4); font-size: 0.9rem; transition: color 0.2s, transform 0.2s; }
     a:hover .contact-link-arrow { color: var(--red); transform: translate(3px, -3px); }
 
     /* Formulario premium */
@@ -979,8 +980,8 @@ let mx = 0, my = 0, cx = 0, cy = 0;
 document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
 
 (function tickCursor() {
-  cx += (mx - cx) * 0.18;
-  cy += (my - cy) * 0.18;
+  cx += (mx - cx) * 0.75;
+  cy += (my - cy) * 0.75;
   cursor.style.transform = `translate(${cx - cursor.offsetWidth / 2}px, ${cy - cursor.offsetHeight / 2}px)`;
   requestAnimationFrame(tickCursor);
 })();
