@@ -49,19 +49,20 @@
     /* ── Cursor custom ── */
     .cursor {
       position: fixed;
-      width: 8px;
-      height: 8px;
+      left: 0; top: 0;
+      width: 10px;
+      height: 10px;
       background: var(--white);
       border-radius: 50%;
       pointer-events: none;
       z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out), background 0.3s;
+      will-change: transform;
+      transition: width 0.35s var(--ease-out), height 0.35s var(--ease-out);
       mix-blend-mode: difference;
     }
     .cursor.hover {
-      width: 48px;
-      height: 48px;
+      width: 52px;
+      height: 52px;
     }
 
     /* ── NAV ── */
@@ -334,7 +335,7 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      margin-bottom: 5rem;
+      margin-bottom: 4rem;
     }
     .portfolio-title {
       font-family: var(--font-title);
@@ -343,81 +344,116 @@
       letter-spacing: -0.025em;
     }
 
-    .portfolio-grid {
+    /* Lista de proyectos estilo editorial */
+    .portfolio-list { display: flex; flex-direction: column; position: relative; }
+
+    .portfolio-row {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.5px;
-      background: rgba(240,237,232,0.06);
-    }
-
-    .portfolio-item {
-      background: var(--black);
-      position: relative;
-      overflow: hidden;
+      grid-template-columns: 56px 1fr auto auto;
+      align-items: center;
+      gap: 2rem;
+      padding: 2.2rem 0;
+      border-top: 1px solid rgba(240,237,232,0.06);
+      text-decoration: none;
+      color: inherit;
       cursor: none;
-    }
-
-    /* Imagen con curtain reveal */
-    .portfolio-img {
-      width: 100%;
-      height: 320px;
+      position: relative;
+      transition: padding-left 0.4s var(--ease-out);
       overflow: hidden;
-      position: relative;
     }
-    .portfolio-img-inner {
-      width: 100%;
-      height: 100%;
-      position: relative;
-    }
-    .portfolio-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transform: scale(1.08);
-      transition: transform 0.7s var(--ease-out), filter 0.4s;
-      filter: grayscale(30%);
-    }
-    .portfolio-item:hover .portfolio-img img {
-      transform: scale(1);
-      filter: grayscale(0%);
-    }
+    .portfolio-row:last-child { border-bottom: 1px solid rgba(240,237,232,0.06); }
 
-    /* Curtain overlay */
-    .portfolio-curtain {
+    .portfolio-row::before {
+      content: '';
       position: absolute;
       inset: 0;
-      background: var(--black);
-      transform-origin: top;
-      z-index: 2;
+      background: var(--red-dim);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.45s var(--ease-out);
+    }
+    .portfolio-row:hover::before  { transform: scaleX(1); }
+    .portfolio-row:hover { padding-left: 0.75rem; }
+
+    .p-num {
+      font-size: 0.68rem;
+      color: var(--red);
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      position: relative;
+    }
+    .p-name {
+      font-family: var(--font-title);
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      position: relative;
+      transition: color 0.25s;
+    }
+    .p-tags {
+      font-size: 0.72rem;
+      color: var(--grey-4);
+      letter-spacing: 0.06em;
+      position: relative;
+      text-align: right;
+    }
+    .p-arrow {
+      font-size: 1.1rem;
+      color: var(--grey-3);
+      position: relative;
+      transition: color 0.25s, transform 0.3s var(--ease-out);
+    }
+    .portfolio-row:hover .p-arrow {
+      color: var(--red);
+      transform: translate(4px, -4px);
     }
 
-    .portfolio-info {
-      padding: 1.75rem 2rem;
+    /* Imagen flotante que sigue el cursor */
+    .portfolio-hover-img {
+      position: fixed;
+      width: 340px;
+      height: 220px;
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0;
+      border-radius: 2px;
+      overflow: hidden;
+      transform: translate(-50%, -60%) scale(0.88) rotate(-2deg);
+      transition: opacity 0.3s, transform 0.4s var(--ease-out);
+      will-change: transform, opacity;
+    }
+    .portfolio-hover-img.visible {
+      opacity: 1;
+      transform: translate(-50%, -60%) scale(1) rotate(0deg);
+    }
+    /* Panel de color por proyecto (sin necesidad de imágenes reales) */
+    .portfolio-hover-img .p-preview {
+      width: 100%;
+      height: 100%;
       display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
     }
-    .portfolio-name {
+    .p-preview-title {
       font-family: var(--font-title);
-      font-size: 1.1rem;
-      font-weight: 500;
-      letter-spacing: -0.01em;
-      margin-bottom: 0.3rem;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
     }
-    .portfolio-tag {
-      font-size: 0.7rem;
-      color: var(--grey-4);
-      letter-spacing: 0.08em;
+    .p-preview-sub {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.6);
+      margin-top: 0.3rem;
+      letter-spacing: 0.06em;
     }
-    .portfolio-arrow {
-      font-size: 1rem;
-      color: var(--grey-3);
-      transition: color 0.25s, transform 0.25s var(--ease-out);
-    }
-    .portfolio-item:hover .portfolio-arrow {
-      color: var(--red);
-      transform: translate(3px, -3px);
-    }
+    /* Colores únicos por proyecto */
+    .p-color-1 { background: linear-gradient(135deg, #1a0a0a 0%, #3d0f0f 100%); }
+    .p-color-2 { background: linear-gradient(135deg, #0a0a1a 0%, #0f1a3d 100%); }
+    .p-color-3 { background: linear-gradient(135deg, #1a1200 0%, #3d2c00 100%); }
+    .p-color-4 { background: linear-gradient(135deg, #001a12 0%, #003d2a 100%); }
 
     /* ── ABOUT ── */
     #about {
@@ -671,7 +707,8 @@
       .services-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
       .service-item { grid-template-columns: 48px 1fr; }
       .service-desc { display: none; }
-      .portfolio-grid { grid-template-columns: 1fr; }
+      .portfolio-row { grid-template-columns: 48px 1fr auto; }
+      .p-tags { display: none; }
       .about-grid,
       .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
       footer { flex-direction: column; gap: 0.75rem; text-align: center; }
@@ -761,6 +798,11 @@
   </div>
 </section>
 
+<!-- Imagen flotante portfolio -->
+<div class="portfolio-hover-img" id="portfolioHoverImg">
+  <div class="p-preview" id="portfolioPreview"></div>
+</div>
+
 <!-- ── PORTFOLIO ── -->
 <section id="portfolio">
   <div class="container">
@@ -770,70 +812,42 @@
         <h2 class="portfolio-title reveal">Trabajos destacados</h2>
       </div>
     </div>
-    <div class="portfolio-grid">
+    <div class="portfolio-list">
 
-      <a href="https://loscrovas.com.ar" target="_blank" rel="noopener" class="portfolio-item">
-        <div class="portfolio-img">
-          <div class="portfolio-img-inner">
-            <img src="images/los-crovas.png" alt="Los Crovas" loading="lazy" />
-          </div>
-          <div class="portfolio-curtain"></div>
-        </div>
-        <div class="portfolio-info">
-          <div>
-            <div class="portfolio-name">Los Crovas</div>
-            <div class="portfolio-tag">E-commerce · Admin dinámico</div>
-          </div>
-          <span class="portfolio-arrow">↗</span>
-        </div>
+      <a href="https://loscrovas.com.ar" target="_blank" rel="noopener"
+         class="portfolio-row reveal"
+         data-color="p-color-1" data-title="Los Crovas" data-sub="E-commerce · Admin dinámico">
+        <span class="p-num">01</span>
+        <span class="p-name">Los Crovas</span>
+        <span class="p-tags">E-commerce · Admin dinámico</span>
+        <span class="p-arrow">↗</span>
       </a>
 
-      <a href="https://og-barber-studio.pages.dev/" target="_blank" rel="noopener" class="portfolio-item">
-        <div class="portfolio-img">
-          <div class="portfolio-img-inner">
-            <img src="images/og-barber.png" alt="OG Barber Studio" loading="lazy" />
-          </div>
-          <div class="portfolio-curtain"></div>
-        </div>
-        <div class="portfolio-info">
-          <div>
-            <div class="portfolio-name">OG Barber Studio</div>
-            <div class="portfolio-tag">Reservas · Dark luxury</div>
-          </div>
-          <span class="portfolio-arrow">↗</span>
-        </div>
+      <a href="https://og-barber-studio.pages.dev/" target="_blank" rel="noopener"
+         class="portfolio-row reveal"
+         data-color="p-color-2" data-title="OG Barber Studio" data-sub="Reservas · Dark luxury">
+        <span class="p-num">02</span>
+        <span class="p-name">OG Barber Studio</span>
+        <span class="p-tags">Reservas · Dark luxury</span>
+        <span class="p-arrow">↗</span>
       </a>
 
-      <a href="https://cafeterialaz.pages.dev/" target="_blank" rel="noopener" class="portfolio-item">
-        <div class="portfolio-img">
-          <div class="portfolio-img-inner">
-            <img src="images/cafe-la-z.png" alt="Café La Z" loading="lazy" />
-          </div>
-          <div class="portfolio-curtain"></div>
-        </div>
-        <div class="portfolio-info">
-          <div>
-            <div class="portfolio-name">Café La Z</div>
-            <div class="portfolio-tag">Menú digital · QR bilingüe</div>
-          </div>
-          <span class="portfolio-arrow">↗</span>
-        </div>
+      <a href="https://cafeterialaz.pages.dev/" target="_blank" rel="noopener"
+         class="portfolio-row reveal"
+         data-color="p-color-3" data-title="Café La Z" data-sub="Menú digital · QR bilingüe">
+        <span class="p-num">03</span>
+        <span class="p-name">Café La Z</span>
+        <span class="p-tags">Menú digital · QR bilingüe</span>
+        <span class="p-arrow">↗</span>
       </a>
 
-      <a href="https://22patagoniasushi.pages.dev/" target="_blank" rel="noopener" class="portfolio-item">
-        <div class="portfolio-img">
-          <div class="portfolio-img-inner">
-            <img src="images/22-sushi.png" alt="22 Patagonia Sushi" loading="lazy" />
-          </div>
-          <div class="portfolio-curtain"></div>
-        </div>
-        <div class="portfolio-info">
-          <div>
-            <div class="portfolio-name">22 Patagonia Sushi</div>
-            <div class="portfolio-tag">Landing · Galería premium</div>
-          </div>
-          <span class="portfolio-arrow">↗</span>
-        </div>
+      <a href="https://22patagoniasushi.pages.dev/" target="_blank" rel="noopener"
+         class="portfolio-row reveal"
+         data-color="p-color-4" data-title="22 Patagonia Sushi" data-sub="Landing · Galería premium">
+        <span class="p-num">04</span>
+        <span class="p-name">22 Patagonia Sushi</span>
+        <span class="p-tags">Landing · Galería premium</span>
+        <span class="p-arrow">↗</span>
       </a>
 
     </div>
@@ -958,20 +972,57 @@
 <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
 
 <script>
-// ── Cursor personalizado ──
+// ── Cursor personalizado con lerp (suave, sin lag) ──
 const cursor = document.getElementById('cursor');
-let mx = 0, my = 0;
+let mx = 0, my = 0, cx = 0, cy = 0;
 
-document.addEventListener('mousemove', e => {
-  mx = e.clientX;
-  my = e.clientY;
-  cursor.style.left = mx + 'px';
-  cursor.style.top  = my + 'px';
-});
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
 
-document.querySelectorAll('a, button, .service-item, .portfolio-item').forEach(el => {
+(function tickCursor() {
+  cx += (mx - cx) * 0.18;
+  cy += (my - cy) * 0.18;
+  cursor.style.transform = `translate(${cx - cursor.offsetWidth / 2}px, ${cy - cursor.offsetHeight / 2}px)`;
+  requestAnimationFrame(tickCursor);
+})();
+
+document.querySelectorAll('a, button, .service-item, .portfolio-row').forEach(el => {
   el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
   el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+});
+
+// ── Portfolio: imagen flotante que sigue el cursor ──
+const hoverImg   = document.getElementById('portfolioHoverImg');
+const hoverPrev  = document.getElementById('portfolioPreview');
+let hx = 0, hy = 0, hcx = 0, hcy = 0, hoverActive = false;
+
+document.addEventListener('mousemove', e => { hx = e.clientX; hy = e.clientY; });
+
+(function tickHover() {
+  if (hoverActive) {
+    hcx += (hx - hcx) * 0.1;
+    hcy += (hy - hcy) * 0.1;
+    hoverImg.style.left = hcx + 'px';
+    hoverImg.style.top  = hcy + 'px';
+  }
+  requestAnimationFrame(tickHover);
+})();
+
+document.querySelectorAll('.portfolio-row').forEach(row => {
+  const color = row.dataset.color;
+  const title = row.dataset.title;
+  const sub   = row.dataset.sub;
+
+  row.addEventListener('mouseenter', () => {
+    hcx = hx; hcy = hy;
+    hoverPrev.className = `p-preview ${color}`;
+    hoverPrev.innerHTML = `<div class="p-preview-title">${title}</div><div class="p-preview-sub">${sub}</div>`;
+    hoverActive = true;
+    hoverImg.classList.add('visible');
+  });
+  row.addEventListener('mouseleave', () => {
+    hoverActive = false;
+    hoverImg.classList.remove('visible');
+  });
 });
 
 // ── Lenis smooth scroll ──
@@ -1044,21 +1095,6 @@ gsap.utils.toArray('.reveal-right').forEach(el => {
     duration: 1,
     ease: 'power3.out',
     scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none' },
-  });
-});
-
-// Portfolio: curtain reveal al hacer scroll
-gsap.utils.toArray('.portfolio-curtain').forEach(curtain => {
-  gsap.to(curtain, {
-    scaleY: 0,
-    transformOrigin: 'top',
-    duration: 1.1,
-    ease: 'power4.inOut',
-    scrollTrigger: {
-      trigger: curtain.closest('.portfolio-item'),
-      start: 'top 80%',
-      toggleActions: 'play none none none',
-    },
   });
 });
 
