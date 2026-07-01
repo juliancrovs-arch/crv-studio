@@ -3,482 +3,1079 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="CRV Estudio — Diseño web, desarrollo y fotografía digital premium desde Patagonia." />
-  <title>CRV Estudio</title>
+  <meta name="description" content="CRV Studio — Diseño web, desarrollo y fotografía digital premium desde Patagonia." />
+  <title>CRV Studio</title>
+
+  <!-- Tipografías premium (Fontshare — 100% gratis) -->
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500&display=swap" rel="stylesheet" />
+
   <style>
+    /* ── Reset ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg:      #0a0a0a;
-      --surface: rgba(255,255,255,0.03);
-      --border:  rgba(255,255,255,0.08);
-      --fg:      #ffffff;
-      --muted:   #666;
-      --accent:  #ffffff;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--fg);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-      overflow-x: hidden;
-    }
-
+    html { font-size: 16px; }
     a { text-decoration: none; color: inherit; }
+    img { display: block; }
 
-    /* ── Fondo animado (CSS puro, sin JS) ── */
-    .bg-grid {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-    }
-    .bg-glow {
-      position: fixed;
-      top: -20%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
+    /* ── Tokens ── */
+    :root {
+      --black:   #080808;
+      --grey-1:  #111111;
+      --grey-2:  #1c1c1c;
+      --grey-3:  #2e2e2e;
+      --grey-4:  #555555;
+      --white:   #f0ede8;       /* blanco roto, no agresivo */
+      --red:     #c0392b;       /* rojo elegante, oscuro */
+      --red-dim: rgba(192,57,43,0.12);
+
+      --font-title: 'Clash Display', sans-serif;
+      --font-body:  'Satoshi', sans-serif;
+
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in:  cubic-bezier(0.7, 0, 0.84, 0);
     }
 
-    .content { position: relative; z-index: 10; }
+    /* ── Base ── */
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: none; /* cursor personalizado */
+    }
 
-    /* ── Nav ── */
+    /* ── Cursor custom ── */
+    .cursor {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: var(--white);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out), background 0.3s;
+      mix-blend-mode: difference;
+    }
+    .cursor.hover {
+      width: 48px;
+      height: 48px;
+    }
+
+    /* ── NAV ── */
     nav {
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
       z-index: 100;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.25rem 3rem;
-      background: rgba(10,10,10,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      padding: 0 3rem;
+      height: 64px;
+      border-bottom: 1px solid rgba(240,237,232,0.06);
+      background: rgba(8,8,8,0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
 
-    .logo { font-size: 1rem; font-weight: 700; letter-spacing: 0.2em; }
+    .nav-logo {
+      font-family: var(--font-title);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .nav-logo span { color: var(--red); }
 
-    nav ul { display: flex; list-style: none; gap: 2.5rem; }
-    nav ul a { font-size: 0.85rem; color: var(--muted); transition: color 0.2s; }
-    nav ul a:hover { color: var(--fg); }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;
+    }
+    .nav-links a {
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: var(--grey-4);
+      text-transform: uppercase;
+      position: relative;
+      transition: color 0.25s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--red);
+      transition: width 0.3s var(--ease-out);
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover::after { width: 100%; }
 
     .nav-cta {
-      padding: 0.55rem 1.25rem;
-      border: 1px solid var(--border);
-      font-size: 0.8rem;
-      color: var(--fg);
-      background: transparent;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: inherit;
-    }
-    .nav-cta:hover { border-color: var(--fg); background: rgba(255,255,255,0.06); }
-
-    /* ── Hero ── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 6rem 2rem 4rem;
-    }
-
-    .hero-tag {
-      font-size: 0.7rem;
-      letter-spacing: 0.3em;
-      color: var(--muted);
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      margin-bottom: 2rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.8rem, 8vw, 5.5rem);
-      font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      margin-bottom: 1.5rem;
-      max-width: 800px;
-    }
-
-    .hero-sub {
-      font-size: clamp(0.95rem, 2vw, 1.15rem);
-      color: var(--muted);
-      max-width: 520px;
-      line-height: 1.7;
-      margin-bottom: 3rem;
-    }
-
-    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
-
-    .btn {
-      padding: 0.75rem 2rem;
-      font-size: 0.85rem;
-      font-family: inherit;
-      cursor: pointer;
-      border: 1px solid var(--border);
+      color: var(--white);
       background: transparent;
-      color: var(--fg);
-      transition: all 0.2s;
-      display: inline-block;
+      border: 1px solid rgba(240,237,232,0.2);
+      padding: 0.5rem 1.25rem;
+      cursor: none;
+      transition: border-color 0.25s, background 0.25s;
     }
-    .btn:hover { border-color: var(--fg); background: rgba(255,255,255,0.06); }
-    .btn-primary { background: var(--fg); color: #000; border-color: var(--fg); font-weight: 600; }
-    .btn-primary:hover { background: rgba(255,255,255,0.85); }
-
-    .hero-scroll {
-      margin-top: 5rem;
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      color: var(--muted);
-      animation: fadeUp 3s ease infinite;
-    }
-    @keyframes fadeUp {
-      0%,100% { opacity: 0.3; transform: translateY(4px); }
-      50%      { opacity: 1;   transform: translateY(0); }
+    .nav-cta:hover {
+      border-color: var(--red);
+      background: var(--red-dim);
     }
 
     /* ── Secciones ── */
-    section { padding: 6rem 2rem; }
-    .inner { max-width: 1200px; margin: 0 auto; }
+    section { position: relative; }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 3rem;
+    }
 
-    .section-label {
+    .section-tag {
+      display: inline-block;
       font-size: 0.65rem;
+      font-weight: 500;
       letter-spacing: 0.3em;
-      color: var(--muted);
       text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-    .section-title {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 3.5rem;
+      color: var(--red);
+      margin-bottom: 1.25rem;
     }
 
-    /* ── Servicios ── */
-    .services-grid {
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-top: 64px;
+      border-bottom: 1px solid rgba(240,237,232,0.06);
+      overflow: hidden;
+    }
+
+    .hero-inner {
+      padding: 8rem 3rem 5rem;
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      color: var(--grey-4);
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--red);
+    }
+
+    .hero-title {
+      font-family: var(--font-title);
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      font-weight: 600;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 3rem;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(240,237,232,0.25);
+    }
+
+    .hero-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(240,237,232,0.06);
+      margin-top: 2rem;
+    }
+    .hero-desc {
+      font-size: 0.9rem;
+      color: var(--grey-4);
+      max-width: 380px;
+      line-height: 1.8;
+    }
+    .hero-scroll {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--grey-4);
+    }
+    .scroll-line {
+      width: 40px;
+      height: 1px;
+      background: var(--grey-3);
+      position: relative;
+      overflow: hidden;
+    }
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--white);
+      animation: scanline 2s ease infinite;
+    }
+    @keyframes scanline {
+      0%   { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    /* ── SERVICIOS ── */
+    #services {
+      padding: 8rem 0;
+      border-bottom: 1px solid rgba(240,237,232,0.06);
+    }
+
+    .services-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 5rem;
+    }
+    .services-title {
+      font-family: var(--font-title);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+    }
+    .services-count {
+      font-size: 0.75rem;
+      color: var(--grey-4);
+      letter-spacing: 0.1em;
+    }
+
+    .services-list { display: flex; flex-direction: column; }
+
+    .service-item {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1px;
-      border: 1px solid var(--border);
+      grid-template-columns: 60px 1fr auto;
+      align-items: center;
+      gap: 2rem;
+      padding: 2rem 0;
+      border-top: 1px solid rgba(240,237,232,0.06);
+      cursor: none;
+      transition: padding 0.35s var(--ease-out);
+      position: relative;
+      overflow: hidden;
+    }
+    .service-item:last-child { border-bottom: 1px solid rgba(240,237,232,0.06); }
+    .service-item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--red-dim);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s var(--ease-out);
+    }
+    .service-item:hover::before { transform: scaleX(1); }
+    .service-item:hover { padding-left: 1rem; }
+
+    .service-num {
+      font-size: 0.7rem;
+      color: var(--red);
+      letter-spacing: 0.1em;
+      font-weight: 500;
+      position: relative;
+    }
+    .service-name {
+      font-family: var(--font-title);
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      position: relative;
+    }
+    .service-desc {
+      font-size: 0.8rem;
+      color: var(--grey-4);
+      max-width: 260px;
+      text-align: right;
+      line-height: 1.7;
+      position: relative;
     }
 
-    .service-card {
-      padding: 2rem;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      transition: background 0.2s;
+    /* ── PORTFOLIO ── */
+    #portfolio {
+      padding: 8rem 0;
+      border-bottom: 1px solid rgba(240,237,232,0.06);
     }
-    .service-card:hover { background: rgba(255,255,255,0.05); }
-    .service-icon { font-size: 1.5rem; margin-bottom: 1rem; display: block; }
-    .service-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.6rem; }
-    .service-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
 
-    /* ── Portfolio ── */
-    #portfolio { border-top: 1px solid var(--border); }
+    .portfolio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 5rem;
+    }
+    .portfolio-title {
+      font-family: var(--font-title);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+    }
 
     .portfolio-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5px;
+      background: rgba(240,237,232,0.06);
     }
 
     .portfolio-item {
-      border: 1px solid var(--border);
+      background: var(--black);
+      position: relative;
       overflow: hidden;
-      transition: border-color 0.2s;
+      cursor: none;
     }
-    .portfolio-item:hover { border-color: rgba(255,255,255,0.25); }
 
+    /* Imagen con curtain reveal */
     .portfolio-img {
       width: 100%;
-      height: 240px;
+      height: 320px;
       overflow: hidden;
-      background: #111;
+      position: relative;
+    }
+    .portfolio-img-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
     }
     .portfolio-img img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.5s ease;
-      display: block;
+      transform: scale(1.08);
+      transition: transform 0.7s var(--ease-out), filter 0.4s;
+      filter: grayscale(30%);
     }
-    .portfolio-item:hover .portfolio-img img { transform: scale(1.04); }
-
-    .portfolio-info { padding: 1.5rem; }
-    .portfolio-info h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; }
-    .portfolio-info p { font-size: 0.82rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.6; }
-    .portfolio-link {
-      font-size: 0.78rem;
-      color: var(--muted);
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 0.15rem;
-      transition: all 0.2s;
-      display: inline-block;
+    .portfolio-item:hover .portfolio-img img {
+      transform: scale(1);
+      filter: grayscale(0%);
     }
-    .portfolio-link:hover { color: var(--fg); border-color: var(--fg); }
 
-    /* ── Sobre mí ── */
-    #about { border-top: 1px solid var(--border); }
+    /* Curtain overlay */
+    .portfolio-curtain {
+      position: absolute;
+      inset: 0;
+      background: var(--black);
+      transform-origin: top;
+      z-index: 2;
+    }
+
+    .portfolio-info {
+      padding: 1.75rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .portfolio-name {
+      font-family: var(--font-title);
+      font-size: 1.1rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.3rem;
+    }
+    .portfolio-tag {
+      font-size: 0.7rem;
+      color: var(--grey-4);
+      letter-spacing: 0.08em;
+    }
+    .portfolio-arrow {
+      font-size: 1rem;
+      color: var(--grey-3);
+      transition: color 0.25s, transform 0.25s var(--ease-out);
+    }
+    .portfolio-item:hover .portfolio-arrow {
+      color: var(--red);
+      transform: translate(3px, -3px);
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      padding: 8rem 0;
+      border-bottom: 1px solid rgba(240,237,232,0.06);
+    }
 
     .about-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: center;
+      gap: 6rem;
+      align-items: start;
     }
+
+    .about-title {
+      font-family: var(--font-title);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      margin-bottom: 2.5rem;
+    }
+    .about-title span { color: var(--red); }
 
     .about-text p {
       font-size: 0.9rem;
-      color: var(--muted);
+      color: var(--grey-4);
       line-height: 1.9;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
     }
-    .about-text p:last-child { margin-bottom: 0; }
 
     .about-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1px;
-      border: 1px solid var(--border);
+      background: rgba(240,237,232,0.06);
+      margin-top: 3rem;
     }
     .stat {
-      padding: 1.5rem;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
+      background: var(--black);
+      padding: 2rem 1.5rem;
     }
     .stat-num {
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      margin-bottom: 0.25rem;
+      font-family: var(--font-title);
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 0.5rem;
     }
-    .stat-label { font-size: 0.75rem; color: var(--muted); }
+    .stat-num span { color: var(--red); }
+    .stat-label {
+      font-size: 0.72rem;
+      color: var(--grey-4);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
 
-    /* ── Footer ── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 3rem 2rem;
+    /* Stack right column */
+    .about-right { padding-top: 0.5rem; }
+
+    .stack-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1.5rem;
     }
-    .footer-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 3rem;
-      margin-bottom: 3rem;
-    }
-    .footer-brand p { font-size: 0.85rem; color: var(--muted); margin-top: 0.75rem; line-height: 1.7; }
-    .footer-col h4 { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
-    .footer-col a { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.5rem; transition: color 0.2s; }
-    .footer-col a:hover { color: var(--fg); }
-    .footer-bottom {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
+    .stack-list { display: flex; flex-direction: column; }
+    .stack-item {
       display: flex;
       justify-content: space-between;
-      font-size: 0.75rem;
-      color: var(--muted);
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(240,237,232,0.06);
+      font-size: 0.85rem;
+    }
+    .stack-item:first-child { border-top: 1px solid rgba(240,237,232,0.06); }
+    .stack-item-name { font-weight: 500; }
+    .stack-item-use { font-size: 0.72rem; color: var(--grey-4); }
+
+    /* ── CONTACTO ── */
+    #contact {
+      padding: 8rem 0;
+      border-bottom: 1px solid rgba(240,237,232,0.06);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+
+    .contact-title {
+      font-family: var(--font-title);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .contact-desc {
+      font-size: 0.88rem;
+      color: var(--grey-4);
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+    }
+    .contact-links { display: flex; flex-direction: column; gap: 0.75rem; }
+    .contact-link-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(240,237,232,0.06);
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .contact-link-item:first-child { border-top: 1px solid rgba(240,237,232,0.06); }
+    .contact-link-label { font-size: 0.65rem; color: var(--grey-4); letter-spacing: 0.15em; text-transform: uppercase; }
+    .contact-link-val { font-weight: 500; }
+    .contact-link-arrow { color: var(--grey-3); font-size: 0.85rem; transition: color 0.2s, transform 0.2s; }
+    a:hover .contact-link-arrow { color: var(--red); transform: translate(3px, -3px); }
+
+    /* Formulario premium */
+    .contact-form { display: flex; flex-direction: column; gap: 0; }
+
+    .form-field {
+      position: relative;
+      padding: 1.5rem 0 0;
+      border-bottom: 1px solid rgba(240,237,232,0.1);
+      margin-bottom: 0.25rem;
+    }
+    .form-field:last-of-type { margin-bottom: 2rem; }
+
+    .form-label {
+      position: absolute;
+      top: 1.5rem;
+      left: 0;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--grey-4);
+      pointer-events: none;
+      transition: top 0.25s var(--ease-out), font-size 0.25s, color 0.25s;
+    }
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: var(--white);
+      padding: 0.5rem 0 1rem;
+      resize: none;
+      caret-color: var(--red);
+    }
+    .form-textarea { min-height: 80px; }
+
+    .form-input:focus ~ .form-label,
+    .form-input:not(:placeholder-shown) ~ .form-label,
+    .form-textarea:focus ~ .form-label,
+    .form-textarea:not(:placeholder-shown) ~ .form-label {
+      top: 0;
+      font-size: 0.6rem;
+      color: var(--red);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder { color: transparent; }
+
+    .form-field:focus-within {
+      border-bottom-color: var(--red);
+    }
+
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: transparent;
+      border: 1px solid rgba(240,237,232,0.15);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 1rem 2rem;
+      cursor: none;
+      transition: border-color 0.25s, background 0.25s;
+      align-self: flex-start;
+    }
+    .btn-submit:hover {
+      border-color: var(--red);
+      background: var(--red-dim);
+    }
+    .btn-submit-arrow {
+      transition: transform 0.25s var(--ease-out);
+    }
+    .btn-submit:hover .btn-submit-arrow { transform: translate(4px, 0); }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-logo {
+      font-family: var(--font-title);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+    }
+    .footer-logo span { color: var(--red); }
+    .footer-copy {
+      font-size: 0.72rem;
+      color: var(--grey-4);
+      letter-spacing: 0.05em;
+    }
+    .footer-origin {
+      font-size: 0.72rem;
+      color: var(--grey-4);
+    }
+
+    /* ── Animaciones GSAP (estado inicial) ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
     }
 
     /* ── Responsive ── */
-    @media (max-width: 768px) {
-      nav { padding: 1rem 1.25rem; }
-      nav ul { display: none; }
-      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
-      .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
-      .footer-bottom { flex-direction: column; gap: 0.5rem; }
-    }
-    @media (max-width: 480px) {
+    @media (max-width: 900px) {
+      .container { padding: 0 1.5rem; }
+      nav { padding: 0 1.5rem; }
+      .nav-links { display: none; }
+      .hero-inner { padding: 6rem 1.5rem 3rem; }
+      .hero-bottom { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+      .services-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+      .service-item { grid-template-columns: 48px 1fr; }
+      .service-desc { display: none; }
       .portfolio-grid { grid-template-columns: 1fr; }
+      .about-grid,
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      footer { flex-direction: column; gap: 0.75rem; text-align: center; }
     }
   </style>
 </head>
 <body>
 
-<div class="bg-grid"></div>
-<div class="bg-glow"></div>
+<!-- Cursor personalizado -->
+<div class="cursor" id="cursor"></div>
 
-<div class="content">
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo">CRV<span>.</span>STUDIO</div>
+  <ul class="nav-links">
+    <li><a href="#services">Servicios</a></li>
+    <li><a href="#portfolio">Trabajos</a></li>
+    <li><a href="#about">Sobre mí</a></li>
+    <li><a href="#contact">Contacto</a></li>
+  </ul>
+  <button class="nav-cta" id="nav-cta">Conversemos</button>
+</nav>
 
-  <nav>
-    <span class="logo">CRV</span>
-    <ul>
-      <li><a href="#services">Servicios</a></li>
-      <li><a href="#portfolio">Trabajos</a></li>
-      <li><a href="#about">Sobre mí</a></li>
-    </ul>
-    <button class="nav-cta" onclick="document.querySelector('footer').scrollIntoView({behavior:'smooth'})">Conversemos</button>
-  </nav>
-
-  <!-- Hero -->
-  <section class="hero">
-    <p class="hero-tag">Patagonia Argentina · Desde Esquel</p>
-    <h1>Diseño web y<br>desarrollo premium</h1>
-    <p class="hero-sub">Sitios web de alto impacto para marcas que buscan diferenciarse. Rápidos, modernos y hechos a medida.</p>
-    <div class="hero-btns">
-      <a href="#portfolio" class="btn btn-primary">Ver trabajos</a>
-      <a href="#about" class="btn">Sobre mí</a>
-    </div>
-    <p class="hero-scroll">↓ explorar</p>
-  </section>
-
-  <!-- Servicios -->
-  <section id="services">
-    <div class="inner">
-      <p class="section-label">Qué hago</p>
-      <h2 class="section-title">Servicios</h2>
-      <div class="services-grid">
-        <div class="service-card">
-          <span class="service-icon">🌐</span>
-          <h3>Diseño Web</h3>
-          <p>Sitios minimalistas y de alto impacto. Responsivo, rápido, pensado en cada detalle.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">⚙️</span>
-          <h3>Desarrollo</h3>
-          <p>Cloudflare Pages + Workers + D1. APIs, bases de datos, rendimiento real.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">🤖</span>
-          <h3>IA Integrada</h3>
-          <p>Agentes conversacionales, automatización con Claude API, sistemas inteligentes.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">📸</span>
-          <h3>Fotografía</h3>
-          <p>Fotografía profesional con edición avanzada. Eventos, productos, contenido de marca.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">🎨</span>
-          <h3>UX / UI</h3>
-          <p>Interfaces intuitivas, accesibles y hermosas. Experiencia en cada interacción.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">🚀</span>
-          <h3>Performance</h3>
-          <p>Lighthouse 90+. SEO, velocidad, conversión. Webs que no solo se ven bien.</p>
-        </div>
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow reveal">Diseño & Desarrollo — Patagonia Argentina</p>
+    <h1 class="hero-title">
+      <span class="reveal" style="display:block">Experiencia</span>
+      <span class="reveal" style="display:block"><em>digital</em></span>
+      <span class="reveal" style="display:block">premium.</span>
+    </h1>
+    <div class="hero-bottom">
+      <p class="hero-desc reveal">
+        Sitios web de alto impacto para marcas que buscan diferenciarse. Rápidos, modernos y hechos a medida desde Patagonia.
+      </p>
+      <div class="hero-scroll reveal">
+        <div class="scroll-line"></div>
+        Scroll
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Portfolio -->
-  <section id="portfolio">
-    <div class="inner">
-      <p class="section-label">Proyectos</p>
-      <h2 class="section-title">Trabajos destacados</h2>
-      <div class="portfolio-grid">
-        <div class="portfolio-item">
-          <div class="portfolio-img"><img src="images/los-crovas.png" alt="Los Crovas" loading="lazy" /></div>
-          <div class="portfolio-info">
-            <h3>Los Crovas</h3>
-            <p>E-commerce artesanal con admin dinámico vía GitHub API. Diseño premium.</p>
-            <a href="https://loscrovas.com.ar" target="_blank" rel="noopener" class="portfolio-link">Ver sitio →</a>
-          </div>
-        </div>
-        <div class="portfolio-item">
-          <div class="portfolio-img"><img src="images/og-barber.png" alt="OG Barber Studio" loading="lazy" /></div>
-          <div class="portfolio-info">
-            <h3>OG Barber Studio</h3>
-            <p>Sistema de reservas completo, calendario con slots. Dark luxury design.</p>
-            <a href="https://og-barber-studio.pages.dev/" target="_blank" rel="noopener" class="portfolio-link">Ver sitio →</a>
-          </div>
-        </div>
-        <div class="portfolio-item">
-          <div class="portfolio-img"><img src="images/cafe-la-z.png" alt="Café La Z" loading="lazy" /></div>
-          <div class="portfolio-info">
-            <h3>Café La Z</h3>
-            <p>Menú digital bilingüe con QR. Admin login, solución moderna.</p>
-            <a href="https://cafeterialaz.pages.dev/" target="_blank" rel="noopener" class="portfolio-link">Ver sitio →</a>
-          </div>
-        </div>
-        <div class="portfolio-item">
-          <div class="portfolio-img"><img src="images/22-sushi.png" alt="22 Patagonia Sushi" loading="lazy" /></div>
-          <div class="portfolio-info">
-            <h3>22 Patagonia Sushi</h3>
-            <p>Landing profesional con galería. Diseño minimalista de alta calidad.</p>
-            <a href="https://22patagoniasushi.pages.dev/" target="_blank" rel="noopener" class="portfolio-link">Ver sitio →</a>
-          </div>
-        </div>
+<!-- ── SERVICIOS ── -->
+<section id="services">
+  <div class="container">
+    <div class="services-header">
+      <div>
+        <span class="section-tag reveal">Qué hago</span>
+        <h2 class="services-title reveal">Servicios</h2>
+      </div>
+      <span class="services-count reveal">06 disciplinas</span>
+    </div>
+    <div class="services-list">
+      <div class="service-item reveal">
+        <span class="service-num">01</span>
+        <span class="service-name">Diseño Web</span>
+        <span class="service-desc">Sitios minimalistas y de alto impacto. Responsivo, rápido, pensado en cada detalle.</span>
+      </div>
+      <div class="service-item reveal">
+        <span class="service-num">02</span>
+        <span class="service-name">Desarrollo</span>
+        <span class="service-desc">Cloudflare Pages + Workers + D1. APIs, bases de datos, performance real.</span>
+      </div>
+      <div class="service-item reveal">
+        <span class="service-num">03</span>
+        <span class="service-name">IA Integrada</span>
+        <span class="service-desc">Agentes conversacionales, automatización con Claude API, sistemas inteligentes.</span>
+      </div>
+      <div class="service-item reveal">
+        <span class="service-num">04</span>
+        <span class="service-name">Fotografía</span>
+        <span class="service-desc">Fotografía profesional, edición avanzada. Eventos, productos, contenido de marca.</span>
+      </div>
+      <div class="service-item reveal">
+        <span class="service-num">05</span>
+        <span class="service-name">UX / UI</span>
+        <span class="service-desc">Interfaces intuitivas, accesibles y hermosas. Experiencia en cada interacción.</span>
+      </div>
+      <div class="service-item reveal">
+        <span class="service-num">06</span>
+        <span class="service-name">Performance</span>
+        <span class="service-desc">Lighthouse 90+. SEO, velocidad, conversión. Webs que no solo se ven bien.</span>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Sobre mí -->
-  <section id="about">
-    <div class="inner">
-      <p class="section-label">Quién soy</p>
-      <h2 class="section-title">Sobre mí</h2>
-      <div class="about-grid">
-        <div class="about-text">
-          <p>Soy Julián Crova, desarrollador y diseñador web con 6+ años en fotografía digital. Desde Patagonia, trabajo con negocios en Latam que buscan presencia digital de impacto.</p>
-          <p>Mi enfoque: minimalista, estratégico, rápido. Stack moderno — Cloudflare Pages + Workers + D1, JavaScript puro, design systems pensados para durar.</p>
-          <p>Cuando no codifico, fotografío eventos, experimento con IA y cultivo interés en tech emergente. Cada proyecto es una oportunidad de crear algo memorable.</p>
+<!-- ── PORTFOLIO ── -->
+<section id="portfolio">
+  <div class="container">
+    <div class="portfolio-header">
+      <div>
+        <span class="section-tag reveal">Proyectos</span>
+        <h2 class="portfolio-title reveal">Trabajos destacados</h2>
+      </div>
+    </div>
+    <div class="portfolio-grid">
+
+      <a href="https://loscrovas.com.ar" target="_blank" rel="noopener" class="portfolio-item">
+        <div class="portfolio-img">
+          <div class="portfolio-img-inner">
+            <img src="images/los-crovas.png" alt="Los Crovas" loading="lazy" />
+          </div>
+          <div class="portfolio-curtain"></div>
         </div>
+        <div class="portfolio-info">
+          <div>
+            <div class="portfolio-name">Los Crovas</div>
+            <div class="portfolio-tag">E-commerce · Admin dinámico</div>
+          </div>
+          <span class="portfolio-arrow">↗</span>
+        </div>
+      </a>
+
+      <a href="https://og-barber-studio.pages.dev/" target="_blank" rel="noopener" class="portfolio-item">
+        <div class="portfolio-img">
+          <div class="portfolio-img-inner">
+            <img src="images/og-barber.png" alt="OG Barber Studio" loading="lazy" />
+          </div>
+          <div class="portfolio-curtain"></div>
+        </div>
+        <div class="portfolio-info">
+          <div>
+            <div class="portfolio-name">OG Barber Studio</div>
+            <div class="portfolio-tag">Reservas · Dark luxury</div>
+          </div>
+          <span class="portfolio-arrow">↗</span>
+        </div>
+      </a>
+
+      <a href="https://cafeterialaz.pages.dev/" target="_blank" rel="noopener" class="portfolio-item">
+        <div class="portfolio-img">
+          <div class="portfolio-img-inner">
+            <img src="images/cafe-la-z.png" alt="Café La Z" loading="lazy" />
+          </div>
+          <div class="portfolio-curtain"></div>
+        </div>
+        <div class="portfolio-info">
+          <div>
+            <div class="portfolio-name">Café La Z</div>
+            <div class="portfolio-tag">Menú digital · QR bilingüe</div>
+          </div>
+          <span class="portfolio-arrow">↗</span>
+        </div>
+      </a>
+
+      <a href="https://22patagoniasushi.pages.dev/" target="_blank" rel="noopener" class="portfolio-item">
+        <div class="portfolio-img">
+          <div class="portfolio-img-inner">
+            <img src="images/22-sushi.png" alt="22 Patagonia Sushi" loading="lazy" />
+          </div>
+          <div class="portfolio-curtain"></div>
+        </div>
+        <div class="portfolio-info">
+          <div>
+            <div class="portfolio-name">22 Patagonia Sushi</div>
+            <div class="portfolio-tag">Landing · Galería premium</div>
+          </div>
+          <span class="portfolio-arrow">↗</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text">
+        <span class="section-tag reveal">Quién soy</span>
+        <h2 class="about-title reveal">
+          Julián<br>Crova<span>.</span>
+        </h2>
+        <p class="reveal">Desarrollador y diseñador web con base en Patagonia. Trabajo con marcas y negocios en Latam que buscan presencia digital de impacto real.</p>
+        <p class="reveal">Mi enfoque es minimalista y estratégico. Código limpio, diseño con criterio, deploy en segundos. Sin frameworks innecesarios ni dependencias que pesen.</p>
+        <p class="reveal">Cuando no estoy codificando, fotografío eventos y experimento con IA. Cada proyecto es una oportunidad de crear algo memorable.</p>
         <div class="about-stats">
-          <div class="stat">
-            <div class="stat-num">5+</div>
+          <div class="stat reveal">
+            <div class="stat-num">5<span>+</span></div>
             <div class="stat-label">Clientes activos</div>
           </div>
-          <div class="stat">
-            <div class="stat-num">90+</div>
+          <div class="stat reveal">
+            <div class="stat-num">90<span>+</span></div>
             <div class="stat-label">Lighthouse score</div>
           </div>
-          <div class="stat">
+          <div class="stat reveal">
             <div class="stat-num">0</div>
             <div class="stat-label">Frameworks innecesarios</div>
           </div>
-          <div class="stat">
+          <div class="stat reveal">
             <div class="stat-num">∞</div>
             <div class="stat-label">Café consumido</div>
           </div>
         </div>
       </div>
+      <div class="about-right reveal-right">
+        <p class="stack-label">Stack</p>
+        <div class="stack-list">
+          <div class="stack-item"><span class="stack-item-name">HTML / CSS / JS</span><span class="stack-item-use">Frontend</span></div>
+          <div class="stack-item"><span class="stack-item-name">Cloudflare Workers</span><span class="stack-item-use">Backend serverless</span></div>
+          <div class="stack-item"><span class="stack-item-name">D1 SQLite</span><span class="stack-item-use">Base de datos</span></div>
+          <div class="stack-item"><span class="stack-item-name">Claude API</span><span class="stack-item-use">IA & Agentes</span></div>
+          <div class="stack-item"><span class="stack-item-name">GSAP + Lenis</span><span class="stack-item-use">Animaciones</span></div>
+          <div class="stack-item"><span class="stack-item-name">Cloudflare Pages</span><span class="stack-item-use">Deploy automático</span></div>
+          <div class="stack-item"><span class="stack-item-name">Resend</span><span class="stack-item-use">Email</span></div>
+        </div>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Footer -->
-  <footer id="contact">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <span class="logo">CRV ESTUDIO</span>
-        <p>Diseño web, desarrollo y fotografía premium desde Patagonia Argentina.</p>
+<!-- ── CONTACTO ── -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <span class="section-tag reveal">Hablemos</span>
+        <h2 class="contact-title reveal">¿Tenés un<br>proyecto?</h2>
+        <p class="contact-desc reveal">Contame qué necesitás. Respondo en menos de 24 horas.</p>
+        <div class="contact-links">
+          <div class="contact-link-item reveal">
+            <span class="contact-link-label">Email</span>
+            <span class="contact-link-val">Próximamente</span>
+            <span class="contact-link-arrow">—</span>
+          </div>
+          <div class="contact-link-item reveal">
+            <span class="contact-link-label">Instagram</span>
+            <span class="contact-link-val">Próximamente</span>
+            <span class="contact-link-arrow">—</span>
+          </div>
+          <div class="contact-link-item reveal">
+            <span class="contact-link-label">LinkedIn</span>
+            <span class="contact-link-val">Próximamente</span>
+            <span class="contact-link-arrow">—</span>
+          </div>
+          <a href="https://github.com/juliancrovs-arch" target="_blank" rel="noopener" class="contact-link-item reveal">
+            <span class="contact-link-label">GitHub</span>
+            <span class="contact-link-val">juliancrovs-arch</span>
+            <span class="contact-link-arrow">↗</span>
+          </a>
+        </div>
       </div>
-      <div class="footer-col">
-        <h4>Navegación</h4>
-        <a href="#services">Servicios</a>
-        <a href="#portfolio">Trabajos</a>
-        <a href="#about">Sobre mí</a>
-      </div>
-      <div class="footer-col">
-        <h4>Contacto</h4>
-        <a href="mailto:julian@crv.studio">julian@crv.studio</a>
-        <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
-        <a href="https://github.com/juliancrovs-arch" target="_blank" rel="noopener">GitHub</a>
-      </div>
+      <form class="contact-form reveal-right" onsubmit="handleSubmit(event)">
+        <div class="form-field">
+          <input class="form-input" type="text" id="nombre" name="nombre" placeholder="Tu nombre" required />
+          <label class="form-label" for="nombre">Nombre</label>
+        </div>
+        <div class="form-field">
+          <input class="form-input" type="email" id="email" name="email" placeholder="tu@email.com" required />
+          <label class="form-label" for="email">Email</label>
+        </div>
+        <div class="form-field">
+          <input class="form-input" type="text" id="proyecto" name="proyecto" placeholder="Tipo de proyecto" />
+          <label class="form-label" for="proyecto">Proyecto</label>
+        </div>
+        <div class="form-field">
+          <textarea class="form-textarea" id="mensaje" name="mensaje" placeholder="Contame más..." rows="3"></textarea>
+          <label class="form-label" for="mensaje">Mensaje</label>
+        </div>
+        <button type="submit" class="btn-submit">
+          Enviar mensaje
+          <span class="btn-submit-arrow">→</span>
+        </button>
+      </form>
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 CRV Estudio</span>
-      <span>Hecho desde Patagonia 🏔️</span>
-    </div>
-  </footer>
+  </div>
+</section>
 
-</div>
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">CRV<span>.</span>STUDIO</div>
+  <div class="footer-copy">© 2026 — Todos los derechos reservados</div>
+  <div class="footer-origin">Hecho desde Patagonia</div>
+</footer>
+
+<!-- GSAP + ScrollTrigger (gratis, incluso comercial) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- Lenis smooth scroll (open source) -->
+<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+
+<script>
+// ── Cursor personalizado ──
+const cursor = document.getElementById('cursor');
+let mx = 0, my = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX;
+  my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top  = my + 'px';
+});
+
+document.querySelectorAll('a, button, .service-item, .portfolio-item').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+});
+
+// ── Lenis smooth scroll ──
+const lenis = new Lenis({
+  duration: 1.4,
+  easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  smoothWheel: true,
+});
+
+function raf(time) {
+  lenis.raf(time);
+  requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
+
+// Conectar Lenis con GSAP ScrollTrigger
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(time => lenis.raf(time * 1000));
+gsap.ticker.lagSmoothing(0);
+
+// ── Nav CTA → scroll a contacto ──
+document.getElementById('nav-cta').addEventListener('click', () => {
+  lenis.scrollTo('#contact', { duration: 1.6 });
+});
+
+// ── GSAP ScrollTrigger: registrar plugin ──
+gsap.registerPlugin(ScrollTrigger);
+
+// Hero: animación de entrada al cargar
+gsap.timeline({ delay: 0.2 })
+  .to('.hero-inner .reveal', {
+    opacity: 1,
+    y: 0,
+    duration: 1,
+    stagger: 0.12,
+    ease: 'power3.out',
+  });
+
+// Elementos .reveal en scroll
+gsap.utils.toArray('.reveal').forEach(el => {
+  // Si ya fue animado por el hero, saltar
+  if (el.closest('#hero')) return;
+  gsap.to(el, {
+    opacity: 1,
+    y: 0,
+    duration: 0.9,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: el,
+      start: 'top 88%',
+      toggleActions: 'play none none none',
+    },
+  });
+});
+
+gsap.utils.toArray('.reveal-left').forEach(el => {
+  gsap.to(el, {
+    opacity: 1,
+    x: 0,
+    duration: 1,
+    ease: 'power3.out',
+    scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none' },
+  });
+});
+
+gsap.utils.toArray('.reveal-right').forEach(el => {
+  gsap.to(el, {
+    opacity: 1,
+    x: 0,
+    duration: 1,
+    ease: 'power3.out',
+    scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none' },
+  });
+});
+
+// Portfolio: curtain reveal al hacer scroll
+gsap.utils.toArray('.portfolio-curtain').forEach(curtain => {
+  gsap.to(curtain, {
+    scaleY: 0,
+    transformOrigin: 'top',
+    duration: 1.1,
+    ease: 'power4.inOut',
+    scrollTrigger: {
+      trigger: curtain.closest('.portfolio-item'),
+      start: 'top 80%',
+      toggleActions: 'play none none none',
+    },
+  });
+});
+
+// ── Formulario (placeholder hasta tener email real) ──
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.btn-submit');
+  btn.textContent = '✓ Mensaje enviado';
+  btn.style.borderColor = 'var(--red)';
+  btn.style.background  = 'var(--red-dim)';
+  setTimeout(() => {
+    btn.innerHTML = 'Enviar mensaje <span class="btn-submit-arrow">→</span>';
+    btn.style.borderColor = '';
+    btn.style.background  = '';
+    e.target.reset();
+  }, 3000);
+}
+</script>
 </body>
 </html>
