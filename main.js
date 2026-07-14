@@ -26,22 +26,6 @@ if (reducedMotion) {
   revealEls.forEach(el => io.observe(el));
 }
 
-// ── Parallax sutil del video de fondo ──
-const bgWrap = document.querySelector('.bg-video-wrap');
-
-if (!reducedMotion && bgWrap) {
-  let ticking = false;
-  window.addEventListener('scroll', () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => {
-      // el video se hunde levemente al scrollear (cinematográfico, no mareante)
-      bgWrap.style.transform = `translateY(${window.scrollY * -0.06}px)`;
-      ticking = false;
-    });
-  }, { passive: true });
-}
-
 // ── Cursor custom (solo desktop con mouse) ──
 if (!reducedMotion && window.matchMedia('(hover: hover)').matches) {
   const cursor = document.createElement('div');

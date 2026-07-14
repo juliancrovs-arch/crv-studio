@@ -35,6 +35,7 @@
   <ul class="nav-links">
     <li><a href="#proyectos">Proyectos</a></li>
     <li><a href="#estudio">Estudio</a></li>
+    <li><a href="/foto">Fotografía</a></li>
     <li><a href="#contacto">Contacto</a></li>
   </ul>
 </nav>
@@ -43,6 +44,7 @@
 <header id="hero">
   <h1 class="hero-title"><span>CRV</span> <em>Studio</em></h1>
   <p class="hero-tagline">Estudio digital desde la Patagonia</p>
+  <a class="hero-cta" href="#contacto">Creamos tu página web, 100% personalizada&nbsp;→</a>
   <div class="hero-scroll" aria-hidden="true">
     <div class="scroll-track"><div class="scroll-dot"></div></div>
   </div>
@@ -122,8 +124,18 @@
     </video>
     <div class="container">
       <span class="section-label reveal">Contacto</span>
-      <a class="contact-email reveal" href="mailto:julian@crv.studio">julian@crv.studio</a>
-      <a class="contact-gh reveal" href="https://github.com/juliancrovs-arch" target="_blank" rel="noopener">GitHub — juliancrovs-arch&nbsp;↗</a>
+      <h2 class="contact-heading reveal">¿Tenés un proyecto?<br><em>Contame.</em></h2>
+      <form class="contact-form reveal" action="https://formsubmit.co/juliancrovs@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="Nuevo mensaje desde CRV Studio" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_next" value="https://crv-studio.pages.dev/#contacto" />
+        <div class="form-row">
+          <input class="form-input" type="text" name="nombre" placeholder="Tu nombre" required />
+          <input class="form-input" type="email" name="email" placeholder="Tu email" required />
+        </div>
+        <textarea class="form-input" name="mensaje" rows="5" placeholder="Contame qué necesitás..." required></textarea>
+        <button class="form-submit" type="submit">Enviar mensaje&nbsp;→</button>
+      </form>
     </div>
   </section>
 
