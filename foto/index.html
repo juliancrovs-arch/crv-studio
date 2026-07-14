@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Portfolio fotográfico de Julián Crova — Eventos, productos y contenido de marca desde Patagonia." />
+  <title>Fotografía — Julián Crova</title>
+
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; user-select: none; -webkit-user-drag: none; pointer-events: none; }
+
+    :root {
+      --black:   #080808;
+      --grey-1:  #111111;
+      --grey-2:  #1c1c1c;
+      --grey-3:  #333333;
+      --grey-4:  #888888;
+      --grey-5:  #bbbbbb;
+      --white:   #f2efe9;
+      --red:     #d63031;
+      --red-dim: rgba(214,48,49,0.08);
+      --font-title: 'Clash Display', sans-serif;
+      --font-body:  'Satoshi', sans-serif;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-weight: 500;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    header {
+      padding: 3rem 3rem 0;
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .header-title {
+      font-family: var(--font-title);
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .header-title span { color: var(--red); }
+    .header-meta { text-align: right; padding-top: 0.5rem; }
+    .header-name {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey-4);
+      margin-bottom: 0.25rem;
+    }
+    .header-loc { font-size: 0.72rem; color: var(--grey-4); letter-spacing: 0.06em; }
+
+    .divider {
+      max-width: 1280px;
+      margin: 2rem auto 0;
+      padding: 0 3rem;
+      height: 1px;
+      background: rgba(240,237,232,0.08);
+    }
+
+    /* ── CATEGORÍAS ── */
+    .categories {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 3rem;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    .cat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--grey-4);
+    }
+    .cat-btn {
+      background: none;
+      border: none;
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--grey-4);
+      cursor: pointer;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .cat-btn:hover, .cat-btn.active {
+      color: var(--white);
+      border-bottom-color: var(--red);
+    }
+
+    /* ── GRID ── */
+    .grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 3rem 6rem;
+      columns: 3;
+      column-gap: 1rem;
+    }
+    .grid-item {
+      break-inside: avoid;
+      margin-bottom: 1rem;
+      position: relative;
+      overflow: hidden;
+      background: var(--grey-1);
+      cursor: pointer;
+    }
+    .grid-item::before { content: ''; display: block; }
+    .grid-item.ratio-4-3::before  { padding-top: 75%; }
+    .grid-item.ratio-3-4::before  { padding-top: 133%; }
+    .grid-item.ratio-1-1::before  { padding-top: 100%; }
+    .grid-item.ratio-16-9::before { padding-top: 56.25%; }
+
+    /* Canvas ocupa todo el espacio */
+    .grid-item canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Overlay de marca de agua — siempre visible sobre canvas */
+    .watermark {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 2;
+      overflow: hidden;
+    }
+    .watermark-text {
+      font-family: var(--font-title);
+      font-size: clamp(0.7rem, 2vw, 1rem);
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(242,239,233,0.18);
+      transform: rotate(-35deg);
+      white-space: nowrap;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      /* Repetir en diagonal */
+      position: absolute;
+      width: 200%;
+      text-align: center;
+      line-height: 3rem;
+    }
+
+    /* Hover overlay con info */
+    .grid-item-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.2) 50%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.35s var(--ease-out);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.25rem;
+    }
+    .grid-item:hover .grid-item-overlay { opacity: 1; }
+
+    .overlay-cat {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.2rem;
+    }
+    .overlay-title {
+      font-family: var(--font-title);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+    .overlay-price {
+      font-size: 0.85rem;
+      color: var(--grey-5);
+    }
+    .overlay-cta {
+      margin-top: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--white);
+      border: 1px solid rgba(240,237,232,0.3);
+      padding: 0.4rem 0.85rem;
+      align-self: flex-start;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .grid-item:hover .overlay-cta:hover {
+      border-color: var(--red);
+      background: var(--red-dim);
+    }
+
+    /* Gradiente de fondo placeholder por categoría */
+    .grid-item.evento   { background: linear-gradient(135deg, #111, #1a0a0a); }
+    .grid-item.producto { background: linear-gradient(135deg, #111, #0a0a1a); }
+    .grid-item.marca    { background: linear-gradient(135deg, #111, #0a1a0a); }
+    .grid-item.retrato  { background: linear-gradient(135deg, #111, #1a1000); }
+
+    /* Icono placeholder */
+    .placeholder-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      opacity: 0.06;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── MODAL ── */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s var(--ease-out);
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal {
+      background: var(--grey-1);
+      border: 1px solid rgba(240,237,232,0.08);
+      max-width: 820px;
+      width: 90vw;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      transform: translateY(24px);
+      transition: transform 0.4s var(--ease-out);
+    }
+    .modal-backdrop.open .modal { transform: translateY(0); }
+
+    /* Preview con marca de agua fuerte en el modal */
+    .modal-preview {
+      position: relative;
+      overflow: hidden;
+      min-height: 320px;
+      background: var(--grey-2);
+    }
+    .modal-preview canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .modal-watermark {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 2;
+    }
+    /* Múltiples líneas de marca de agua en el modal */
+    .modal-watermark::before,
+    .modal-watermark::after {
+      content: 'JULIÁN CROVA © 2026  JULIÁN CROVA © 2026  JULIÁN CROVA © 2026';
+      position: absolute;
+      font-family: var(--font-title);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      color: rgba(242,239,233,0.22);
+      transform: rotate(-35deg);
+      white-space: nowrap;
+      left: -50%;
+      width: 200%;
+      text-align: center;
+    }
+    .modal-watermark::before { top: 25%; }
+    .modal-watermark::after  { top: 60%; }
+
+    .modal-info {
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .modal-cat {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.5rem;
+    }
+    .modal-title {
+      font-family: var(--font-title);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    .modal-desc {
+      font-size: 0.88rem;
+      color: var(--grey-5);
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+    }
+    .modal-price-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey-4);
+      margin-bottom: 0.25rem;
+    }
+    .modal-price {
+      font-family: var(--font-title);
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      margin-bottom: 2rem;
+    }
+    .modal-price span {
+      font-size: 1rem;
+      color: var(--grey-4);
+      font-family: var(--font-body);
+      font-weight: 400;
+      letter-spacing: 0;
+    }
+
+    .btn-wpp {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: #25D366;
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.9rem 1.75rem;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      text-decoration: none;
+    }
+    .btn-wpp:hover { opacity: 0.88; }
+
+    .modal-note {
+      margin-top: 1rem;
+      font-size: 0.72rem;
+      color: var(--grey-4);
+      line-height: 1.6;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: var(--grey-4);
+      font-size: 1.25rem;
+      cursor: pointer;
+      z-index: 10;
+      transition: color 0.2s;
+      line-height: 1;
+      padding: 0.25rem;
+    }
+    .modal-close:hover { color: var(--white); }
+    .modal { position: relative; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(240,237,232,0.06);
+      padding: 2rem 3rem;
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-sig {
+      font-family: var(--font-title);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: var(--grey-4);
+    }
+    .footer-sig span { color: var(--red); }
+    .footer-copy { font-size: 0.72rem; color: var(--grey-4); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      header, .categories, .grid, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .grid { columns: 2; }
+      header { flex-direction: column; gap: 1rem; }
+      .header-meta { text-align: left; }
+      .modal { grid-template-columns: 1fr; }
+      .modal-preview { min-height: 220px; }
+    }
+    @media (max-width: 560px) {
+      .grid { columns: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 class="header-title">Foto<span>.</span></h1>
+  <div class="header-meta">
+    <p class="header-name">Julián Crova</p>
+    <p class="header-loc">Patagonia, Argentina</p>
+  </div>
+</header>
+
+<div class="divider"></div>
+
+<div class="categories">
+  <span class="cat-label">Ver</span>
+  <button class="cat-btn active" data-cat="all">Todo</button>
+  <button class="cat-btn" data-cat="evento">Eventos</button>
+  <button class="cat-btn" data-cat="producto">Productos</button>
+  <button class="cat-btn" data-cat="marca">Marca</button>
+  <button class="cat-btn" data-cat="retrato">Retratos</button>
+</div>
+
+<div class="grid" id="grid">
+  <!-- Las cards se generan desde el catálogo JS -->
+</div>
+
+<!-- ── MODAL ── -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-preview" id="modalPreview">
+      <canvas id="modalCanvas"></canvas>
+      <div class="modal-watermark"></div>
+    </div>
+    <div class="modal-info">
+      <div>
+        <p class="modal-cat" id="modalCat"></p>
+        <h2 class="modal-title" id="modalTitle"></h2>
+        <p class="modal-desc" id="modalDesc"></p>
+      </div>
+      <div>
+        <p class="modal-price-label">Precio</p>
+        <p class="modal-price" id="modalPrice"></p>
+        <a class="btn-wpp" id="modalWpp" href="#" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          Quiero esta foto
+        </a>
+        <p class="modal-note">Recibís el archivo digital en alta resolución sin marca de agua.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-sig">JULIÁN CROVA<span>.</span></div>
+  <div class="footer-copy">© 2026 — Patagonia Argentina</div>
+</footer>
+
+<script>
+// ── Protección: deshabilitar click derecho y drag ──
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('dragstart',   e => e.preventDefault());
+
+// ── Catálogo de fotos ──
+// Para agregar una foto real: reemplazá "src" con la ruta de tu imagen,
+// y actualizá título, precio y descripción.
+const FOTOS = [
+  {
+    id: 1,
+    src: null,
+    titulo: 'Atardecer Patagónico',
+    cat: 'evento',
+    catLabel: 'Evento',
+    desc: 'Captura del atardecer sobre la cordillera desde el lago Nahuel Huapi. Luz dorada, cielo abierto.',
+    precio: 8500,
+    ratio: 'ratio-4-3',
+    bgColor: ['#1a0a0a', '#0d0505'],
+  },
+  {
+    id: 2,
+    src: null,
+    titulo: 'Retrato Urbano I',
+    cat: 'retrato',
+    catLabel: 'Retrato',
+    desc: 'Serie de retratos urbanos en blanco y negro. Expresión, luz natural, sin artificios.',
+    precio: 6000,
+    ratio: 'ratio-3-4',
+    bgColor: ['#0a0a0a', '#1a1000'],
+  },
+  {
+    id: 3,
+    src: null,
+    titulo: 'Producto Premium',
+    cat: 'producto',
+    catLabel: 'Producto',
+    desc: 'Fotografía de producto sobre fondo neutro. Ideal para e-commerce y catálogos de marca.',
+    precio: 4500,
+    ratio: 'ratio-1-1',
+    bgColor: ['#0a0a1a', '#0d0d1a'],
+  },
+  {
+    id: 4,
+    src: null,
+    titulo: 'Identidad de Marca',
+    cat: 'marca',
+    catLabel: 'Marca',
+    desc: 'Sesión de branding completa. Estética, paleta y narrativa visual para tu marca.',
+    precio: 12000,
+    ratio: 'ratio-16-9',
+    bgColor: ['#0a1a0a', '#0d1a0d'],
+  },
+  {
+    id: 5,
+    src: null,
+    titulo: 'Evento Nocturno',
+    cat: 'evento',
+    catLabel: 'Evento',
+    desc: 'Fotografía de eventos nocturnos. Alta ISO, sin flash, atmósfera real conservada.',
+    precio: 9000,
+    ratio: 'ratio-3-4',
+    bgColor: ['#1a0a0a', '#0d0505'],
+  },
+  {
+    id: 6,
+    src: null,
+    titulo: 'Retrato Estudio',
+    cat: 'retrato',
+    catLabel: 'Retrato',
+    desc: 'Luz de estudio controlada, fondo liso. Ideal para uso profesional y redes.',
+    precio: 5500,
+    ratio: 'ratio-4-3',
+    bgColor: ['#1a1000', '#0d0d00'],
+  },
+  {
+    id: 7,
+    src: null,
+    titulo: 'Gastronomía',
+    cat: 'producto',
+    catLabel: 'Producto',
+    desc: 'Fotografía gastronómica para menús, redes sociales y campañas de restaurantes.',
+    precio: 5000,
+    ratio: 'ratio-1-1',
+    bgColor: ['#0a0a1a', '#111'],
+  },
+  {
+    id: 8,
+    src: null,
+    titulo: 'Campaña Editorial',
+    cat: 'marca',
+    catLabel: 'Marca',
+    desc: 'Editorial completa para campaña de temporada. Concepto, dirección y postproducción.',
+    precio: 15000,
+    ratio: 'ratio-3-4',
+    bgColor: ['#0a1a0a', '#111'],
+  },
+  {
+    id: 9,
+    src: null,
+    titulo: 'Paisaje Cordillera',
+    cat: 'evento',
+    catLabel: 'Paisaje',
+    desc: 'Paisaje de alta montaña en Patagonia. Formato panorámico, ideal para impresión grande.',
+    precio: 10000,
+    ratio: 'ratio-16-9',
+    bgColor: ['#0d0505', '#1a0505'],
+  },
+];
+
+const WPP = '5492945350085';
+const WATERMARK = 'JULIÁN CROVA';
+
+// ── Renderizar grid ──
+function renderGrid(filtro) {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  const lista = filtro === 'all' ? FOTOS : FOTOS.filter(f => f.cat === filtro);
+
+  lista.forEach(foto => {
+    const card = document.createElement('div');
+    card.className = `grid-item ${foto.cat} ${foto.ratio}`;
+    card.innerHTML = `
+      <span class="placeholder-icon">◎</span>
+      <canvas class="foto-canvas" data-id="${foto.id}"></canvas>
+      <div class="watermark">
+        <span class="watermark-text">${WATERMARK}  ${WATERMARK}  ${WATERMARK}</span>
+      </div>
+      <div class="grid-item-overlay">
+        <span class="overlay-cat">${foto.catLabel}</span>
+        <span class="overlay-title">${foto.titulo}</span>
+        <span class="overlay-price">$${foto.precio.toLocaleString('es-AR')}</span>
+        <span class="overlay-cta">Ver y comprar →</span>
+      </div>
+    `;
+    card.addEventListener('click', () => abrirModal(foto));
+    grid.appendChild(card);
+
+    // Dibujar canvas placeholder (o imagen real si hay src)
+    const canvas = card.querySelector('canvas');
+    dibujarCanvas(canvas, foto);
+  });
+}
+
+// ── Dibujar canvas con gradiente o imagen real ──
+function dibujarCanvas(canvas, foto) {
+  const parent = canvas.parentElement;
+  const w = parent.offsetWidth || 400;
+  const h = parent.offsetHeight || 300;
+  canvas.width  = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
+
+  if (foto.src) {
+    const img = new Image();
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0, w, h);
+      dibujarWatermarkCanvas(ctx, w, h);
+    };
+    img.src = foto.src;
+  } else {
+    const grad = ctx.createLinearGradient(0, 0, w, h);
+    grad.addColorStop(0, foto.bgColor[0]);
+    grad.addColorStop(1, foto.bgColor[1]);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+  }
+}
+
+function dibujarWatermarkCanvas(ctx, w, h) {
+  ctx.save();
+  ctx.globalAlpha = 0.12;
+  ctx.fillStyle = '#f2efe9';
+  ctx.font = '600 13px sans-serif';
+  ctx.translate(w / 2, h / 2);
+  ctx.rotate(-Math.PI / 5);
+  const txt = WATERMARK + '   ';
+  const rep = Math.ceil(w / ctx.measureText(txt).width) + 2;
+  for (let row = -3; row <= 3; row++) {
+    let x = -w;
+    for (let i = 0; i < rep; i++) {
+      ctx.fillText(txt, x, row * 40);
+      x += ctx.measureText(txt).width;
+    }
+  }
+  ctx.restore();
+}
+
+// ── Modal ──
+function abrirModal(foto) {
+  const backdrop = document.getElementById('modalBackdrop');
+  document.getElementById('modalCat').textContent    = foto.catLabel;
+  document.getElementById('modalTitle').textContent  = foto.titulo;
+  document.getElementById('modalDesc').textContent   = foto.desc;
+  document.getElementById('modalPrice').innerHTML    = `$${foto.precio.toLocaleString('es-AR')} <span>ARS</span>`;
+
+  const msg = encodeURIComponent(`Hola Julián, me interesa la foto "${foto.titulo}" — $${foto.precio.toLocaleString('es-AR')} ARS`);
+  document.getElementById('modalWpp').href = `https://wa.me/${WPP}?text=${msg}`;
+
+  // Canvas del modal
+  const canvas = document.getElementById('modalCanvas');
+  const preview = document.getElementById('modalPreview');
+  const w = preview.offsetWidth  || 400;
+  const h = preview.offsetHeight || 320;
+  canvas.width  = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
+
+  if (foto.src) {
+    const img = new Image();
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0, w, h);
+      dibujarWatermarkCanvas(ctx, w, h);
+    };
+    img.src = foto.src;
+  } else {
+    const grad = ctx.createLinearGradient(0, 0, w, h);
+    grad.addColorStop(0, foto.bgColor[0]);
+    grad.addColorStop(1, foto.bgColor[1]);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+  }
+
+  backdrop.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function cerrarModal() {
+  document.getElementById('modalBackdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modalClose').addEventListener('click', cerrarModal);
+document.getElementById('modalBackdrop').addEventListener('click', e => {
+  if (e.target === e.currentTarget) cerrarModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
+
+// ── Filtro de categorías ──
+document.querySelectorAll('.cat-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderGrid(btn.dataset.cat);
+  });
+});
+
+// ── Init ──
+renderGrid('all');
+</script>
+</body>
+</html>
