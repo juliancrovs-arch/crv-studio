@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="CRV Studio — Estudio digital desde la Patagonia. Diseño web, desarrollo y sistemas digitales desde Esquel." />
-  <title>CRV Studio — Patagonia Digital</title>
+  <meta name="description" content="CRV Studio — Estudio digital desde la Patagonia. Diseño y desarrollo web artesanal desde Esquel." />
+  <title>CRV Studio — Estudio digital desde la Patagonia</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,139 +14,123 @@
 </head>
 <body>
 
-<!-- ── CAPA 2: Montañas SVG (fixed, parallax via JS) ── -->
-<div class="mountains" aria-hidden="true">
-
-  <!-- Niebla superior (funde con el negro del cielo) -->
-  <div class="mtn-fog-top"></div>
-
-  <!-- Rango lejano: ondulaciones suaves, cordón de fondo -->
-  <svg class="mtn mtn-1" viewBox="0 0 1440 350" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,350 L0,195 L50,178 Q80,165 110,158 L145,138 Q165,126 185,132 L220,112 Q240,98 262,104 L295,82 Q315,68 338,72 L375,50 Q395,38 418,42 L455,20 Q478,8 500,12 L530,24 Q555,32 575,28 L608,42 Q630,50 650,46 L682,60 Q705,68 725,64 L758,78 Q780,86 800,82 L835,95 Q858,102 878,98 L912,112 Q935,118 955,115 L988,128 Q1010,135 1030,132 L1062,145 Q1085,152 1105,149 L1138,162 Q1160,168 1180,165 L1215,178 Q1245,185 1270,182 L1305,192 Q1355,200 1440,205 L1440,350 Z"/>
-  </svg>
-
-  <!-- Segundo rango: más carácter, picos más marcados -->
-  <svg class="mtn mtn-2" viewBox="0 0 1440 350" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,350 L0,225 L45,210 L80,220 L115,198 L148,212 L185,185 L220,200 L258,172 L295,188 L335,158 L372,175 L410,145 L448,162 L488,130 L528,148 L568,115 Q590,102 612,108 L645,88 Q668,74 692,78 L722,62 Q745,48 768,52 L798,68 Q820,76 840,72 L870,86 Q892,94 912,90 L942,104 Q965,112 985,108 L1018,122 Q1040,130 1060,127 L1092,140 Q1115,148 1135,145 L1168,158 Q1190,165 1210,162 L1245,175 Q1275,183 1300,180 L1335,192 Q1375,200 1440,205 L1440,350 Z"/>
-  </svg>
-
-  <!-- Tercer rango: silueta más cercana, mayor contraste -->
-  <svg class="mtn mtn-3" viewBox="0 0 1440 350" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,350 L0,258 L40,244 L78,255 L115,232 L150,248 L188,220 L225,238 L262,208 L300,225 L340,195 L378,212 L418,180 L458,198 L498,165 L538,184 L578,150 L618,170 L658,135 L698,158 L740,122 Q762,108 785,112 L818,96 Q842,82 865,86 L895,100 Q918,108 938,104 L968,118 Q990,126 1010,122 L1042,136 Q1065,144 1085,140 L1118,154 Q1140,162 1160,158 L1195,172 Q1225,180 1250,177 L1285,190 Q1325,198 1440,205 L1440,350 Z"/>
-  </svg>
-
-  <!-- Primer plano: silueta patagónica dominante, estilo cordón Esquel -->
-  <svg class="mtn mtn-4" viewBox="0 0 1440 350" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,350 L0,298 L38,285 L72,295 L108,272 L140,288 L175,262 L210,278 L248,250 L285,268 L322,238 L360,256 L398,225 L436,244 L475,212 L514,232 L554,198 L594,218 L634,185 L672,205 L712,170 L752,192 L795,155 L835,178 L878,140 Q900,126 922,130 L955,115 Q978,102 1002,106 L1032,120 Q1055,128 1075,124 L1108,138 Q1130,146 1150,143 L1182,156 Q1205,164 1225,161 L1258,174 Q1290,182 1315,179 L1350,192 Q1388,200 1440,205 L1440,350 Z"/>
-  </svg>
-
-  <!-- Niebla inferior (funde montañas con el negro del suelo) -->
-  <div class="mtn-fog"></div>
+<!-- ── CAPA 1: video hero fixed (fondo de todo el sitio) ── -->
+<div class="bg-video-wrap" aria-hidden="true">
+  <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="">
+    <source src="assets/videos/hero.mp4" type="video/mp4" />
+  </video>
+  <div class="bg-vignette"></div>
 </div>
 
-<!-- ── CAPA 4: Canvas nieve ── -->
-<canvas id="snow" aria-hidden="true"></canvas>
+<!-- ── CAPA 2: nieve real por blend mode (slot listo, falta el asset) ──
+     Cuando subas assets/videos/snow-overlay.mp4, descomentá el <source>.
+-->
+<video class="snow-video" autoplay muted loop playsinline preload="none" aria-hidden="true">
+  <!-- <source src="assets/videos/snow-overlay.mp4" type="video/mp4" /> -->
+</video>
 
-<!-- ── NAV ── -->
+<!-- ── CAPA 4: NAV ── -->
 <nav>
-  <span class="nav-logo">CRV<em>.</em></span>
-  <ul>
-    <li><a href="#filosofia">Nosotros</a></li>
+  <a href="#" class="nav-logo">CRV <em>STUDIO</em></a>
+  <ul class="nav-links">
     <li><a href="#proyectos">Proyectos</a></li>
+    <li><a href="#estudio">Estudio</a></li>
     <li><a href="#contacto">Contacto</a></li>
   </ul>
 </nav>
 
 <!-- ── HERO ── -->
-<section id="hero">
-  <p class="hero-eyebrow">Esquel, Patagonia — Argentina</p>
-  <h1 class="hero-title">
-    CRV<br><em>Studio</em>
-  </h1>
-  <p class="hero-tagline">Estudio digital desde el fin del mundo.</p>
-  <div class="hero-scroll">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
+<header id="hero">
+  <h1 class="hero-title"><span>CRV</span> <em>Studio</em></h1>
+  <p class="hero-tagline">Estudio digital desde la Patagonia</p>
+  <div class="hero-scroll" aria-hidden="true">
+    <div class="scroll-track"><div class="scroll-dot"></div></div>
   </div>
-</section>
+</header>
 
-<!-- ── FILOSOFÍA ── -->
-<section id="filosofia">
-  <div class="container">
-    <span class="section-label reveal">01 — Nosotros</span>
-    <div class="filosofia-grid">
-      <h2 class="filosofia-title reveal">Hacemos webs.<br>No páginas.</h2>
-      <div class="filosofia-text">
-        <p class="reveal">CRV Studio es un estudio de diseño y desarrollo digital con base en Esquel, Patagonia. Trabajamos con marcas y negocios que quieren presencia digital que funcione de verdad.</p>
-        <p class="reveal">Sin frameworks innecesarios. Sin dependencias que pesen. Código limpio, deploy en segundos, rendimiento real. Cada proyecto se construye desde cero, a medida, con criterio.</p>
-        <p class="reveal">Creemos que el diseño y la ingeniería son lo mismo cuando se hacen bien.</p>
+<main>
+
+  <!-- ── ESTUDIO / MANIFIESTO ── -->
+  <section id="estudio">
+    <div class="container narrow">
+      <span class="section-label reveal">Estudio</span>
+      <p class="manifiesto reveal">Trabajamos desde Esquel, al pie de la cordillera. Acá las cosas se hacen despacio y se hacen bien&nbsp;— y así también hacemos software.</p>
+      <p class="manifiesto reveal">Cada sitio se construye a mano, desde cero. Sin plantillas, sin frameworks de moda, sin peso muerto. Código limpio que carga en segundos y dura años.</p>
+      <p class="manifiesto dim reveal">Diseño y ingeniería no son cosas distintas. Cuando se hacen bien, son la misma cosa.</p>
+    </div>
+  </section>
+
+  <!-- ── PROYECTOS ──
+       Slot de video de fondo para esta sección (assets/videos/forest.mp4).
+       Cuando exista el asset, descomentá el <source>.
+  -->
+  <section id="proyectos">
+    <video class="section-video" autoplay muted loop playsinline preload="none" aria-hidden="true">
+      <!-- <source src="assets/videos/forest.mp4" type="video/mp4" /> -->
+    </video>
+    <div class="container">
+      <span class="section-label reveal">Proyectos</span>
+
+      <div class="cards">
+
+        <a class="card reveal" href="https://loscrovas.com.ar" target="_blank" rel="noopener">
+          <div class="card-media"><span class="card-media-num">01</span></div>
+          <div class="card-body">
+            <h2 class="card-title">Los Crovas</h2>
+            <p class="card-desc">Sitio para pipas artesanales.</p>
+            <span class="card-link">loscrovas.com.ar&nbsp;↗</span>
+          </div>
+        </a>
+
+        <a class="card reveal" href="https://og-barber-studio.pages.dev" target="_blank" rel="noopener">
+          <div class="card-media"><span class="card-media-num">02</span></div>
+          <div class="card-body">
+            <h2 class="card-title">OG Barber Studio</h2>
+            <p class="card-desc">Reservas online para barbería.</p>
+            <span class="card-link">og-barber-studio.pages.dev&nbsp;↗</span>
+          </div>
+        </a>
+
+        <a class="card reveal" href="https://cafeterialaz.pages.dev" target="_blank" rel="noopener">
+          <div class="card-media"><span class="card-media-num">03</span></div>
+          <div class="card-body">
+            <h2 class="card-title">Café La Z</h2>
+            <p class="card-desc">Presencia digital para café de especialidad.</p>
+            <span class="card-link">cafeterialaz.pages.dev&nbsp;↗</span>
+          </div>
+        </a>
+
+        <a class="card reveal" href="https://22patagoniasushi.pages.dev" target="_blank" rel="noopener">
+          <div class="card-media"><span class="card-media-num">04</span></div>
+          <div class="card-body">
+            <h2 class="card-title">22 Patagonia Sushi</h2>
+            <p class="card-desc">Restaurante de sushi patagónico.</p>
+            <span class="card-link">22patagoniasushi.pages.dev&nbsp;↗</span>
+          </div>
+        </a>
+
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ── PROYECTOS ── -->
-<section id="proyectos">
-  <div class="container">
-    <span class="section-label reveal">02 — Proyectos</span>
-    <div class="proyectos-grid">
-
-      <a href="https://loscrovas.com.ar" target="_blank" rel="noopener" class="card reveal">
-        <div class="card-num">01</div>
-        <h3 class="card-title">Los Crovas</h3>
-        <p class="card-desc">E-commerce para pipas artesanales con catálogo dinámico y panel de administración.</p>
-        <span class="card-link">loscrovas.com.ar ↗</span>
-      </a>
-
-      <a href="https://og-barber-studio.pages.dev/" target="_blank" rel="noopener" class="card reveal">
-        <div class="card-num">02</div>
-        <h3 class="card-title">OG Barber Studio</h3>
-        <p class="card-desc">Sistema de reservas online para barbería premium. Dark luxury, rápido y directo.</p>
-        <span class="card-link">og-barber-studio.pages.dev ↗</span>
-      </a>
-
-      <a href="https://cafeterialaz.pages.dev/" target="_blank" rel="noopener" class="card reveal">
-        <div class="card-num">03</div>
-        <h3 class="card-title">Café La Z</h3>
-        <p class="card-desc">Menú digital con QR, reservas online, panel admin y analytics integrado.</p>
-        <span class="card-link">cafeterialaz.pages.dev ↗</span>
-      </a>
-
-      <a href="https://22patagoniasushi.pages.dev/" target="_blank" rel="noopener" class="card reveal">
-        <div class="card-num">04</div>
-        <h3 class="card-title">22 Patagonia Sushi</h3>
-        <p class="card-desc">Landing premium para restaurante de sushi patagónico con galería y carta digital.</p>
-        <span class="card-link">22patagoniasushi.pages.dev ↗</span>
-      </a>
-
+  <!-- ── CONTACTO ──
+       Slot de video de fondo (assets/videos/storm.mp4). Mismo criterio.
+  -->
+  <section id="contacto">
+    <video class="section-video" autoplay muted loop playsinline preload="none" aria-hidden="true">
+      <!-- <source src="assets/videos/storm.mp4" type="video/mp4" /> -->
+    </video>
+    <div class="container">
+      <span class="section-label reveal">Contacto</span>
+      <a class="contact-email reveal" href="mailto:julian@crv.studio">julian@crv.studio</a>
+      <a class="contact-gh reveal" href="https://github.com/juliancrovs-arch" target="_blank" rel="noopener">GitHub — juliancrovs-arch&nbsp;↗</a>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ── CONTACTO ── -->
-<section id="contacto">
-  <div class="container">
-    <span class="section-label reveal">03 — Contacto</span>
-    <h2 class="contacto-title reveal">¿Tenés un<br>proyecto?</h2>
-    <div class="contacto-links">
-      <a href="mailto:julian@crv.studio" class="contacto-link reveal">
-        <span class="contacto-link-label">Email</span>
-        <span class="contacto-link-val">julian@crv.studio</span>
-        <span class="contacto-link-arrow">↗</span>
-      </a>
-      <a href="https://github.com/juliancrovs-arch" target="_blank" rel="noopener" class="contacto-link reveal">
-        <span class="contacto-link-label">GitHub</span>
-        <span class="contacto-link-val">juliancrovs-arch</span>
-        <span class="contacto-link-arrow">↗</span>
-      </a>
-    </div>
-  </div>
-</section>
+</main>
 
-<!-- ── FOOTER ── -->
 <footer>
-  <span class="footer-logo">CRV<em>.</em>STUDIO</span>
-  <span class="footer-copy">© 2026 — Hecho desde Esquel, Patagonia</span>
+  <span>CRV Studio · Esquel, Patagonia · 2026</span>
 </footer>
 
 <script src="main.js"></script>
